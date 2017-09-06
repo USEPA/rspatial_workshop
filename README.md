@@ -96,32 +96,16 @@ Schedule for the AM and PM workshops is below:
 <td align="left">AM</td>
 </tr>
 <tr class="odd">
-<td align="left">Andrea Maguire</td>
-<td align="left">PM</td>
-</tr>
-<tr class="even">
 <td align="left">Angela McFadden</td>
 <td align="left">AM</td>
-</tr>
-<tr class="odd">
-<td align="left">Brian Schnitker</td>
-<td align="left">PM</td>
 </tr>
 <tr class="even">
 <td align="left">Britt Dean</td>
 <td align="left">AM</td>
 </tr>
 <tr class="odd">
-<td align="left">Christine Hartless</td>
-<td align="left">PM</td>
-</tr>
-<tr class="even">
 <td align="left">Cory Strope</td>
 <td align="left">AM</td>
-</tr>
-<tr class="odd">
-<td align="left">Dave Smith</td>
-<td align="left">PM</td>
 </tr>
 <tr class="even">
 <td align="left">David Gibbs</td>
@@ -130,22 +114,6 @@ Schedule for the AM and PM workshops is below:
 <tr class="odd">
 <td align="left">David Pawel</td>
 <td align="left">AM</td>
-</tr>
-<tr class="even">
-<td align="left">David Wahman</td>
-<td align="left">PM</td>
-</tr>
-<tr class="odd">
-<td align="left">Deeba Yavrom</td>
-<td align="left">PM</td>
-</tr>
-<tr class="even">
-<td align="left">Dwane Young</td>
-<td align="left">PM</td>
-</tr>
-<tr class="odd">
-<td align="left">Emily Crispell</td>
-<td align="left">PM</td>
 </tr>
 <tr class="even">
 <td align="left">Erik Beck</td>
@@ -176,24 +144,56 @@ Schedule for the AM and PM workshops is below:
 <td align="left">AM</td>
 </tr>
 <tr class="odd">
-<td align="left">Kurt Pluntke</td>
-<td align="left">PM</td>
-</tr>
-<tr class="even">
 <td align="left">Leah Ettema</td>
 <td align="left">AM</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Lucas Neas</td>
 <td align="left">AM</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Marta Fuoco</td>
 <td align="left">AM</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Sarah Menassian</td>
 <td align="left">AM</td>
+</tr>
+<tr class="odd">
+<td align="left">Andrea Maguire</td>
+<td align="left">PM</td>
+</tr>
+<tr class="even">
+<td align="left">Brian Schnitker</td>
+<td align="left">PM</td>
+</tr>
+<tr class="odd">
+<td align="left">Christine Hartless</td>
+<td align="left">PM</td>
+</tr>
+<tr class="even">
+<td align="left">Dave Smith</td>
+<td align="left">PM</td>
+</tr>
+<tr class="odd">
+<td align="left">David Wahman</td>
+<td align="left">PM</td>
+</tr>
+<tr class="even">
+<td align="left">Deeba Yavrom</td>
+<td align="left">PM</td>
+</tr>
+<tr class="odd">
+<td align="left">Dwane Young</td>
+<td align="left">PM</td>
+</tr>
+<tr class="even">
+<td align="left">Emily Crispell</td>
+<td align="left">PM</td>
+</tr>
+<tr class="odd">
+<td align="left">Kurt Pluntke</td>
+<td align="left">PM</td>
 </tr>
 <tr class="even">
 <td align="left">Sarah Waldo</td>
