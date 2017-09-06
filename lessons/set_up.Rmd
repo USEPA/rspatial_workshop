@@ -16,12 +16,13 @@ Out of the box, R is not ready to do GIS analysis.  As such, we need to add a fe
 - [Exercise 1.1](#exercise-11)
 
 ## Required packages
+
 Since the late 2000's there has been a rapid increase in the spatial data handling and analysis capability of R.  The `rgdal`, `rgeos`, `raster`, and `sp` packages (through the very significant effort of the package authors) provided the foundation for doing GIS entirely within R. More recently a new route for handling vector data has emerged in the [`sf` package](https://cran.r-project.org/package=sf).  Most current development for vector processing is focusing on `sf`.  As such, this workshop will as well.  Raster data is still dealt with via [`raster`](https://cran.r-project.org/package=raster) and we will also be using that.
 
 Let's dig in a bit deeper into these two packages.
 
 ### sf
-The [`sf` package](http://r-spatial.github.io/sf/) provides vector data handling via the Simple Features standard, and Open Geospatial Consortium and International Standards Organization standard for spatial data. In addition, `sf` provides a tidy spatial data format that allows for manipulation with the popular `dplyr` package.
+The [`sf` package](http://r-spatial.github.io/sf/) provides vector data handling via the Simple Features standard, an Open Geospatial Consortium and International Standards Organization standard for spatial data. In addition, `sf` provides a tidy spatial data format that allows for manipulation with the popular `dplyr` package.
 
 Getting `sf` added is no different than adding any other package that is on CRAN.
 
@@ -32,7 +33,8 @@ library("sf")
 
 
 ### raster
-For our raster data processing we will use the venerable `raster` package.  
+
+For our raster data processing we will use the venerable `raster` package.   
 
 To install, just do: 
 
@@ -42,13 +44,18 @@ library("raster")
 ```
 
 
-### rgdal
-While we won't be using the `rgdal` package directly, `raster` does depend on it so I wanted to mention it breifly. The `rgdal` package provides tools for reading and writing multiple spatial data formats.  It is based on the [Geospatial Data Abstraction Library (GDAL)](http://www.gdal.org/) which is a project of the Open Source Geospatial Foundation (OSGeo).  The primary use of `rgdal` is to read various spatial data formats into R and store them as `sp` objects.  In this workshop, we will be only using `rgdal` to read in shape files, but it has utility far beyond that.  
-As before, nothing special to get set up with `rgdal` on windows.  Simply:
+### rgdal and sp
+
+While we won't be using the `rgdal` and `sp` packages directly, `raster` does depend on them so I wanted to mention it breifly. The `rgdal` package provides tools for reading and writing multiple spatial data formats.  It is based on the [Geospatial Data Abstraction Library (GDAL)](http://www.gdal.org/) which is a project of the Open Source Geospatial Foundation (OSGeo).  The `sp` package has been the *de-facto* package for spatial data handling and is required for us to use the `raster` package. 
+
+As before, nothing special to get set up with `rgdal` or `sp` on windows.  Simply:
 
 ```{r add_rgdal, eval=FALSE}
 install.packages("rgdal")
 library("rgdal")
+
+install.packages("sp")
+libaray("rgdal")
 ```
 
 Getting set up on Linux or Mac requires more effort (i.e. need to have GDAL installed).  As this is for a USEPA audience the windows installs will work for most.  Thus, discussion of this is mostly beyond the scope of this workshop.  
@@ -57,8 +64,8 @@ Getting set up on Linux or Mac requires more effort (i.e. need to have GDAL inst
 The first exercise won't be too thrilling, but we need to make sure everyone has the four packages installed. 
 
 1. Install `sf` and load `sf` into your library.
-2. Repeat, with `raster` and `rgdal`.
-3. Install `dplyr`.
+2. Repeat, with `raster` `sp`, and `rgdal`.
+3. Also install `dplyr` as we will use that for spatial data manipulation.
 
 
 ## Interacting with an external GIS

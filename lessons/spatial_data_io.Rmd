@@ -18,26 +18,52 @@ So, now that we have the base packages installed and loaded we can work on getti
 - [Geospatial data packages](#geospatial-data-packages)
 
 ## Lesson Exercises
+- [Exercise 2.0](#exercise-20)
 - [Exercise 2.1](#exercise-21)
 - [Exercise 2.2](#exercise-22)
 
+## Before we start: Workflow with RStudio
+I am a bit of a stickler on workflow.  If you standardize that part of your analysis, then it frees up valuable brain cells for other more interesting tasks.  For the rest of the workshop our workflow will follow these rules:
+
+- We will work in an RStudio Project
+- Our data will be stored in the project in a `data` folder
+- All of our analysis and examples will be scripted and live in a `scripts` folder
+- We will manage our paths with the fantastic [`here` package](https://cran.r-project.org/package=here).
+- This last one really isn't a part of the workflow, but it fit here.  The script I am working on will be updated and on the web.  Jeff will provide link.
+
+## Exercise 2.0
+We will work through this together.
+
+1. Create a new RStudio project and name it `rspatial_workshop_am` or `rspatial_workshop_pm`.
+2. In your project create a `data` folder.
+3. In your project create a `scripts` folder.
+4. Create a new script, save it to your `scripts` folder and call it `workshop_code.R`
+5. In the `workshop_code.R` add the following and save:
+
+```{r, eval=FALSE}
+# Packages
+library(here)
+library(sf)
+library(raster)
+library(dplyr)
+```
+
+
 ## Get the example data
-For this workshop, I have collected several example datasets to use and have included them in this repository.  So, let's first grab the dataset.  It is stored as a zip file.  You can download it [directly from this link](https://github.com/USEPA/intro_gis_with_r/blob/master/data.zip?raw=true), or we could use R.  I prefer to use the `httr` package because base `download.file` can act funny on different platforms.
+For this workshop, I have collected several example datasets to use and have included them in this repository.  So, let's first grab the dataset.  It is stored as a zip file.  You can download it [directly from this link](https://github.com/usepa/rspatial_workshop/blob/master/data/data.zip?raw=true), or we could use R.  I prefer to use the `httr` package because base `download.file` can act funny on different platforms.
 
 ```{r download_zip,eval=FALSE}
 library(httr)
-url <- "https://github.com/USEPA/intro_gis_with_r/blob/master/data.zip?raw=true"
-GET(url,write_disk("data.zip",overwrite = TRUE))
+url <- "https://github.com/usepa/rspatial_workshop/blob/master/data/data.zip?raw=true"
+GET(url,write_disk(here("data/data.zip"),overwrite = TRUE))
 ```
 
 Oh and while we are being a bit #rstats crazy...  Let unzip it with R too!
 
 ```{r unzip_it,eval=FALSE}
-unzip("data.zip",overwrite = TRUE)
+unzip(here("data/data.zip"), exdir = here("data"), overwrite = TRUE)
 ```
-```{r unzip_it2,eval=FALSE, echo=FALSE}
-unzip("../data.zip",overwrite = TRUE)
-```
+
 
 ## Vector data: shapefiles
 For many, shapefiles are going to be the most common way to interact with spatial data.  In R, there are many ways to read in shapefiles.  We are going to focus on using `rgdal` because it is flexible and provides a common interface to multiple file types.  But to be fair, I'll also quickly show a another option from `maptools`.
