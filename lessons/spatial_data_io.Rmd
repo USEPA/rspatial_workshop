@@ -201,16 +201,6 @@ system.time(raster("data/dc_ned.tif"))
 
 The speed here is due to the fact that `raster` actually leaves the data on disk as opposed to pulling it all into memory.  Some operations will actually be faster on the `SpatialGrid` objects, but with bigger rasters reading in can be a challenge.  In addition, a lot of the typical raster operations come from the `raster` package and, in my opinion, it is just a bit easier to work with `raster` objects as opposed to `sp` for this.  Lastly, it is what I prefer, so there's that.  We will stick with `raster` for the rest of the workshop.
 
-## Raster data: ArcInfo ASCII
-
-Just to show another example, let's look at ASCII.
-
-```{r ascii_examp}
-dc_elev_ascii <- raster("data/dc_ned.asc")
-dc_elev_ascii
-```
-
-That is really it for reading in rasters.
 
 ## Writing rasters:
 Writing out to a raster file is done with `writeRaster`.  It has three arguments, "x" which is the `raster` object, "filename" which is the output file, and "format" which is the output raster format.  In practice, you can usually get away with not specifying the format as `raster` will try to infer the file format from the file name.  If you want to see the possible formats you can use `writeFormats()`.
