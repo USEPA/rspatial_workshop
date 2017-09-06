@@ -88,88 +88,48 @@ Schedule for the AM and PM workshops is below:
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Amr Safwat</td>
-<td align="left">AM</td>
-</tr>
-<tr class="even">
-<td align="left">Jaleh Abedini</td>
-<td align="left">AM</td>
-</tr>
-<tr class="odd">
-<td align="left">Leah Ettema</td>
-<td align="left">AM</td>
-</tr>
-<tr class="even">
 <td align="left">Alicia Frame</td>
 <td align="left">AM</td>
 </tr>
+<tr class="even">
+<td align="left">Amr Safwat</td>
+<td align="left">AM</td>
+</tr>
 <tr class="odd">
+<td align="left">Andrea Maguire</td>
+<td align="left">PM</td>
+</tr>
+<tr class="even">
 <td align="left">Angela McFadden</td>
 <td align="left">AM</td>
+</tr>
+<tr class="odd">
+<td align="left">Brian Schnitker</td>
+<td align="left">PM</td>
 </tr>
 <tr class="even">
 <td align="left">Britt Dean</td>
 <td align="left">AM</td>
 </tr>
 <tr class="odd">
+<td align="left">Christine Hartless</td>
+<td align="left">PM</td>
+</tr>
+<tr class="even">
 <td align="left">Cory Strope</td>
 <td align="left">AM</td>
+</tr>
+<tr class="odd">
+<td align="left">Dave Smith</td>
+<td align="left">PM</td>
 </tr>
 <tr class="even">
 <td align="left">David Gibbs</td>
 <td align="left">AM</td>
 </tr>
 <tr class="odd">
-<td align="left">Erik Beck</td>
-<td align="left">AM</td>
-</tr>
-<tr class="even">
-<td align="left">Lucas Neas</td>
-<td align="left">AM</td>
-</tr>
-<tr class="odd">
-<td align="left">Marta Fuoco</td>
-<td align="left">AM</td>
-</tr>
-<tr class="even">
-<td align="left">Sarah Menassian</td>
-<td align="left">AM</td>
-</tr>
-<tr class="odd">
 <td align="left">David Pawel</td>
 <td align="left">AM</td>
-</tr>
-<tr class="even">
-<td align="left">George Zipf</td>
-<td align="left">AM</td>
-</tr>
-<tr class="odd">
-<td align="left">Glenn Fernandez</td>
-<td align="left">AM</td>
-</tr>
-<tr class="even">
-<td align="left">Jameel Alsalam</td>
-<td align="left">AM</td>
-</tr>
-<tr class="odd">
-<td align="left">Jennifer Williams</td>
-<td align="left">AM</td>
-</tr>
-<tr class="even">
-<td align="left">Jimmy Wong</td>
-<td align="left">AM</td>
-</tr>
-<tr class="odd">
-<td align="left">Stephanie Wilson</td>
-<td align="left">PM</td>
-</tr>
-<tr class="even">
-<td align="left">Andrea Maguire</td>
-<td align="left">PM</td>
-</tr>
-<tr class="odd">
-<td align="left">Dave Smith</td>
-<td align="left">PM</td>
 </tr>
 <tr class="even">
 <td align="left">David Wahman</td>
@@ -188,7 +148,55 @@ Schedule for the AM and PM workshops is below:
 <td align="left">PM</td>
 </tr>
 <tr class="even">
+<td align="left">Erik Beck</td>
+<td align="left">AM</td>
+</tr>
+<tr class="odd">
+<td align="left">George Zipf</td>
+<td align="left">AM</td>
+</tr>
+<tr class="even">
+<td align="left">Glenn Fernandez</td>
+<td align="left">AM</td>
+</tr>
+<tr class="odd">
+<td align="left">Jaleh Abedini</td>
+<td align="left">AM</td>
+</tr>
+<tr class="even">
+<td align="left">Jameel Alsalam</td>
+<td align="left">AM</td>
+</tr>
+<tr class="odd">
+<td align="left">Jennifer Williams</td>
+<td align="left">AM</td>
+</tr>
+<tr class="even">
+<td align="left">Jimmy Wong</td>
+<td align="left">AM</td>
+</tr>
+<tr class="odd">
 <td align="left">Kurt Pluntke</td>
+<td align="left">PM</td>
+</tr>
+<tr class="even">
+<td align="left">Leah Ettema</td>
+<td align="left">AM</td>
+</tr>
+<tr class="odd">
+<td align="left">Lucas Neas</td>
+<td align="left">AM</td>
+</tr>
+<tr class="even">
+<td align="left">Marta Fuoco</td>
+<td align="left">AM</td>
+</tr>
+<tr class="odd">
+<td align="left">Sarah Menassian</td>
+<td align="left">AM</td>
+</tr>
+<tr class="even">
+<td align="left">Sarah Waldo</td>
 <td align="left">PM</td>
 </tr>
 <tr class="odd">
@@ -200,23 +208,15 @@ Schedule for the AM and PM workshops is below:
 <td align="left">PM</td>
 </tr>
 <tr class="odd">
+<td align="left">Stephanie Wilson</td>
+<td align="left">PM</td>
+</tr>
+<tr class="even">
 <td align="left">Steve Krabbe</td>
 <td align="left">PM</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Troy D. Hill</td>
-<td align="left">PM</td>
-</tr>
-<tr class="odd">
-<td align="left">Brian Schnitker</td>
-<td align="left">PM</td>
-</tr>
-<tr class="even">
-<td align="left">Christine Hartless</td>
-<td align="left">PM</td>
-</tr>
-<tr class="odd">
-<td align="left">Sarah Waldo</td>
 <td align="left">PM</td>
 </tr>
 <tr class="even">

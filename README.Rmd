@@ -34,6 +34,8 @@ Schedule for the AM and PM workshops is below:
 
 ```{r partic, results='asis', echo=FALSE, message=FALSE}
 readr::read_csv("spatial_registrants.csv")%>% 
-  select(name,time) %>%
+  select(name,time) %>% 
+  mutate(name = stringr::str_trim(name)) %>%
+  arrange(name) %>%
   knitr::kable(format="markdown")
 ```
