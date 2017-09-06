@@ -79,10 +79,6 @@ Schedule for the AM and PM workshops is below:
 
 #### Registrants
 
-    readr::read_csv("spatial_registrants.csv")%>% 
-      select(name,time) %>%
-      knitr::kable(format="markdown")
-
     ## Parsed with column specification:
     ## cols(
     ##   name = col_character(),
