@@ -79,13 +79,6 @@ Schedule for the AM and PM workshops is below:
 
 #### Registrants
 
-    ## Parsed with column specification:
-    ## cols(
-    ##   name = col_character(),
-    ##   time = col_character(),
-    ##   email = col_character()
-    ## )
-
 <table>
 <thead>
 <tr class="header">
