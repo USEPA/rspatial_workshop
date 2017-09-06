@@ -1,0 +1,39 @@
+---
+output: md_document
+---
+```{r echo=FALSE, message=FALSE }
+library(tidyverse)
+```
+
+# Introduction to Spatial Analysis and GIS in R
+## 2017 US EPA R User Group Workshop
+### September 12, 2017
+### Washington, DC
+
+This repository contains the materials used in the Introduction to Spatial Analysis and GIS in R workshop presented at the 2017 US EPA R User Group Workshop.  
+
+Schedule for the AM and PM workshops is below:
+
+|Time|Topic|
+|----|-----|
+|8:00 AM - 8:15 AM|Welcome|
+|8:15 AM - 8:30 AM|[Set-up](lessons/set_up.md)|
+|8:30 AM - 9:15 AM|[Spatial data I/O](lessons/spatial_data_io.md)|
+|9:15 AM - 10:15 AM|[Basic Spatial Analysis](lessons/basic_spatial_analysis.md)|
+|10:15 AM - 10:30 AM | BREAK |
+|10:30 AM - 11:30 AM|[Spatial Data Visualization](lessons/spatial_data_viz.md)|
+|11:30 AM - 1:30 PM| LUNCH |
+|1:30 PM - 1:45 PM|Welcome|
+|1:45 PM - 2:00 PM|[Set-up](lessons/set_up.md)|
+|2:00 PM - 2:45 PM|[Spatial data I/O](lessons/spatial_data_io.md)|
+|2:45 PM - 3:45 PM|[Basic Spatial Analysis](lessons/basic_spatial_analysis.md)|
+|3:45 PM - 4:00 PM| BREAK |
+|4:00 PM - 5:00 PM|[Spatial Data Visualization](lessons/spatial_data_viz.md)|
+
+#### Registrants
+
+```{r, results='asis'}
+readr::read_csv("spatial_registrants.csv")%>% 
+  select(name,time) %>%
+  knitr::kable(format="markdown")
+```
