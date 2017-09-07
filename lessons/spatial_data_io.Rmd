@@ -1,6 +1,6 @@
 ```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE, error=FALSE}
 options(repos="http://cran.rstudio.com/")
-pkgs <- c("sp","rgdal","rgeos","raster","knitr", "sf")
+pkgs <- c("sp","rgdal","rgeos","raster","knitr", "sf", "here")
 x<-lapply(pkgs, library, character.only = TRUE)
 opts_chunk$set(tidy=T)
 ```
@@ -70,7 +70,7 @@ unzip(here("data/data.zip"), exdir = here("data"), overwrite = TRUE)
 For many, shapefiles are going to be the most common way to interact with spatial data.  With `sf`, reading in in shapefiles is straightforward via the `st_read()` function.
 
 ```{r read_shp}
-dc_metro <- st_read("data/Metro_Lines.shp")
+dc_metro <- st_read(here("data/Metro_Lines.shp"))
 ```
 
 We will get more into working with `sf` object and visualizing spatial data later, but just to prove that this did something:
@@ -89,19 +89,19 @@ Writing shapefiles is just as easy as reading them, assuming you have an `sf` ob
 Before we do this, we can prove that the shapefile doesn't exist.
 
 ```{r clean_it,echo=FALSE}
-x<-file.remove(list.files("data","dc_metro",full.names = TRUE))
+x<-file.remove(list.files(here("data"),"dc_metro",full.names = TRUE))
 ```
 ```{r noshape}
-list.files("data","dc_metro")
+list.files(here("data"),"dc_metro")
 ```
 
 Now to write the shapefile:
 
 ```{r write_shp}
-st_write(dc_metro,"data/dc_metro.shp")
+st_write(dc_metro,here("data/dc_metro.shp"))
 
 #Is it there?
-list.files("data","dc_metro")
+list.files(here("data"),"dc_metro")
 ```
 
 ## Vector data: geojson
@@ -113,7 +113,7 @@ Last vector example we will show is geojson.  For most desktop GIS users this wi
 To read in with `rgdal` we use "dsn" and "layer" a bit differently.  The "dsn" is the name (and path) of the file, and "layer" is going to be set as "OGRGeoJSON". 
 
 ```{r read_geojson}
-dc_metro_sttn <- st_read("data/metrostations.geojson")
+dc_metro_sttn <- st_read(here("data/metrostations.geojson"))
 ```
 
 And to see that something is there...
@@ -149,7 +149,7 @@ We will now use the `raster` packages `raster()` function to read in some raster
 Using `raster()` is just as easy as `st_read()`
 
 ```{r raster}
-dc_elev <- raster("data/dc_ned.tif")
+dc_elev <- raster(here("data/dc_ned.tif"))
 dc_elev
 plot(dc_elev)
 ```

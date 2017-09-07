@@ -69,15 +69,18 @@ For many, shapefiles are going to be the most common way to interact with spatia
 
 
 ```r
-dc_metro <- st_read("data/Metro_Lines.shp")
+dc_metro <- st_read(here("data/Metro_Lines.shp"))
 ```
 
 ```
-## Cannot open data source data/Metro_Lines.shp
-```
-
-```
-## Error in CPL_read_ogr(dsn, layer, as.character(options), quiet, type, : Open failed.
+## Reading layer `Metro_Lines' from data source `C:\data\rspatial_workshop\data\Metro_Lines.shp' using driver `ESRI Shapefile'
+## converted into: LINESTRING
+## Simple feature collection with 8 features and 4 fields
+## geometry type:  MULTILINESTRING
+## dimension:      XY
+## bbox:           xmin: -77.08576 ymin: 38.83827 xmax: -76.91327 ymax: 38.97984
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
 ```
 
 We will get more into working with `sf` object and visualizing spatial data later, but just to prove that this did something:
@@ -131,7 +134,7 @@ Before we do this, we can prove that the shapefile doesn't exist.
 
 
 ```r
-list.files("data", "dc_metro")
+list.files(here("data"), "dc_metro")
 ```
 
 ```
@@ -142,38 +145,23 @@ Now to write the shapefile:
 
 
 ```r
-st_write(dc_metro, "data/dc_metro.shp")
+st_write(dc_metro, here("data/dc_metro.shp"))
 ```
 
 ```
-## Writing layer `dc_metro' to data source `data/dc_metro.shp' using driver `ESRI Shapefile'
-```
-
-```
-## Warning in CPL_write_ogr(obj, dsn, layer, driver,
-## as.character(dataset_options), : GDAL Error 1: Failed to create file .shp
-## file.
-```
-
-```
-## Warning in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options), : GDAL Error 4: Failed to open Shapefile `data\dc_metro.shp'.
-```
-
-```
-## Creating layer dc_metro failed.
-```
-
-```
-## Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options), : Layer creation failed.
+## Writing layer `dc_metro' to data source `C:/data/rspatial_workshop/data/dc_metro.shp' using driver `ESRI Shapefile'
+## features:       8
+## fields:         4
+## geometry type:  Multi Line String
 ```
 
 ```r
 # Is it there?
-list.files("data", "dc_metro")
+list.files(here("data"), "dc_metro")
 ```
 
 ```
-## character(0)
+## [1] "dc_metro.dbf" "dc_metro.prj" "dc_metro.shp" "dc_metro.shx"
 ```
 
 ## Vector data: geojson
@@ -186,15 +174,18 @@ To read in with `rgdal` we use "dsn" and "layer" a bit differently.  The "dsn" i
 
 
 ```r
-dc_metro_sttn <- st_read("data/metrostations.geojson")
+dc_metro_sttn <- st_read(here("data/metrostations.geojson"))
 ```
 
 ```
-## Cannot open data source data/metrostations.geojson
-```
-
-```
-## Error in CPL_read_ogr(dsn, layer, as.character(options), quiet, type, : Open failed.
+## Reading layer `OGRGeoJSON' from data source `C:\data\rspatial_workshop\data\metrostations.geojson' using driver `GeoJSON'
+## converted into: POINT
+## Simple feature collection with 40 features and 6 fields
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: -77.085 ymin: 38.84567 xmax: -76.93526 ymax: 38.97609
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
 ```
 
 And to see that something is there...
@@ -206,7 +197,7 @@ dc_metro_sttn
 ```
 
 ```
-## Simple feature collection with 40 features and 10 fields
+## Simple feature collection with 40 features and 6 fields
 ## geometry type:  POINT
 ## dimension:      XY
 ## bbox:           xmin: -77.085 ymin: 38.84567 xmax: -76.93526 ymax: 38.97609
@@ -294,88 +285,88 @@ dc_metro_sttn
 ## 38  http://wmata.com/rail/station_detail.cfm?station_id=64
 ## 39   http://wmata.com/rail/station_detail.cfm?station_id=9
 ## 40   http://wmata.com/rail/station_detail.cfm?station_id=8
-##                             LINE                     ADDRESS X.x
-## 1                  green, yellow         3030 14TH STREET NW  17
-## 2                  green, yellow      3700 GEORGIA AVENUE NW  NA
-## 3                            red         327 CEDAR STREET NW  72
-## 4                            red      801 MICHIGAN AVENUE NE  NA
-## 5             red, green, yellow      550 GALLOWAY STREET NE  33
-## 6           blue, orange, silver        4500 BENNING ROAD NE   6
-## 7                         orange    4720 MINNESOTA AVENUE NE  21
-## 8                            red       200 FLORIDA AVENUE NE  NA
-## 9                            red    4501 WISCONSIN AVENUE NW  73
-## 10                           red    5337 WISCONSIN AVENUE NW  35
-## 11          blue, orange, silver            2301 I STREET NW  NA
-## 12          blue, orange, silver          900 18TH STREET NW  28
-## 13                           red  1001 CONNECTICUT AVENUE NW  27
-## 14                           red         1525 20TH STREET NW  23
-## 15                           red         2700 24TH STREET NW  NA
-## 16 grn, yllw, orange, blue, slvr      600 MARYLAND AVENUE SW  NA
-## 17          blue, orange, silver 1200 INDEPENDENCE AVENUE SW  68
-## 18          blue, orange, silver          302 12TH STREET NW  30
-## 19                 green, yellow  701 PENNSYLVANIA AVENUE NW  NA
-## 20                         green             399 M STREET SW  81
-## 21                         green             200 M STREET SE  NA
-## 22          orange, blue, silver           401 3RD STREET SW  29
-## 23                           red             450 F STREET NW  NA
-## 24          blue, orange, silver           355 1ST STREET SE  12
-## 25          blue, orange, silver            1400 I STREET NW  NA
-## 26     red, blue, orange, silver          607 13TH STREET NW  49
-## 27            red, green, yellow             630 H STREET NW  NA
-## 28                 green, yellow             700 M STREET NW  NA
-## 29                 green, yellow            1300 U STREET NW  NA
-## 30                 green, yellow          1701 8TH STREET NW  NA
-## 31                           red           701 1ST STREET NE  76
-## 32                         green      1290 ALABAMA AVENUE SE  18
-## 33                         green         1101 HOWARD ROAD SE   2
-## 34          blue, orange, silver  701 PENNSYLVANIA AVENUE SE  25
-## 35          blue, orange, silver          700 14TH STREET SE  NA
-## 36          blue, orange, silver          192 19TH STREET SE  NA
-## 37                           red  919 RHODE ISLAND AVENUE NE  NA
-## 38                        orange     400 MINNESOTA AVENUE NE  NA
-## 39                           red  4200 CONNECTICUT AVENUE NW  78
-## 40                           red  3599 CONNECTICUT AVENUE NW  15
-##    avg_wkday.x X.y avg_wkday.y                       geometry
-## 1      12608.3  17     12608.3 POINT(-77.0325544130882 38....
-## 2           NA  NA          NA POINT(-77.0234631972137 38....
-## 3       6023.5  72      6023.5 POINT(-77.0181789925646 38....
-## 4           NA  NA          NA POINT(-76.9945365689642 38....
-## 5       7442.0  33      7442.0 POINT(-77.002205364201 38.9...
-## 6       3067.2   6      3067.2 POINT(-76.9383671319143 38....
-## 7       1761.2  21      1761.2 POINT(-76.9352590469192 38....
-## 8           NA  NA          NA POINT(-77.0030227321829 38....
-## 9       7101.2  73      7101.2 POINT(-77.0795896368441 38....
-## 10      9519.0  35      9519.0 POINT(-77.084998118688 38.9...
-## 11          NA  NA          NA POINT(-77.0502800382973 38....
-## 12     22365.4  28     22365.4 POINT(-77.0406977114452 38....
-## 13     26012.4  27     26012.4 POINT(-77.0397031233431 38....
-## 14     18291.8  23     18291.8 POINT(-77.0434166573705 38....
-## 15          NA  NA          NA POINT(-77.0524203221932 38....
-## 16          NA  NA          NA POINT(-77.0219107735302 38....
-## 17     11671.6  68     11671.6 POINT(-77.0280685258322 38....
-## 18      9703.1  30      9703.1 POINT(-77.0281342902871 38....
-## 19          NA  NA          NA POINT(-77.0219166779746 38....
-## 20      4440.0  81      4440.0 POINT(-77.0175074963564 38....
-## 21          NA  NA          NA POINT(-77.0050879350566 38....
-## 22      6352.1  29      6352.1 POINT(-77.0158705045136 38....
-## 23          NA  NA          NA POINT(-77.0166412451066 38....
-## 24      8630.3  12      8630.3 POINT(-77.0051417041544 38....
-## 25          NA  NA          NA POINT(-77.033636466218 38.9...
-## 26     28199.5  49     28199.5 POINT(-77.0280802893592 38....
-## 27          NA  NA          NA POINT(-77.0219176806835 38....
-## 28          NA  NA          NA POINT(-77.0219166711418 38....
-## 29          NA  NA          NA POINT(-77.027498186088 38.9...
-## 30          NA  NA          NA POINT(-77.0219139919702 38....
-## 31     32611.1  76     32611.1 POINT(-77.0074165779102 38....
-## 32      2912.2  18      2912.2 POINT(-76.9885142092577 38....
-## 33      7356.4   2      7356.4 POINT(-76.9953730185932 38....
-## 34      6038.7  25      6038.7 POINT(-76.996003408071 38.8...
-## 35          NA  NA          NA POINT(-76.9854975975333 38....
-## 36          NA  NA          NA POINT(-76.9770911770343 38....
-## 37          NA  NA          NA POINT(-76.9959392002222 38....
-## 38          NA  NA          NA POINT(-76.946750000542 38.8...
-## 39      6624.4  78      6624.4 POINT(-77.0629884863183 38....
-## 40      4637.5  15      4637.5 POINT(-77.0580448228721 38....
+##                             LINE                     ADDRESS
+## 1                  green, yellow         3030 14TH STREET NW
+## 2                  green, yellow      3700 GEORGIA AVENUE NW
+## 3                            red         327 CEDAR STREET NW
+## 4                            red      801 MICHIGAN AVENUE NE
+## 5             red, green, yellow      550 GALLOWAY STREET NE
+## 6           blue, orange, silver        4500 BENNING ROAD NE
+## 7                         orange    4720 MINNESOTA AVENUE NE
+## 8                            red       200 FLORIDA AVENUE NE
+## 9                            red    4501 WISCONSIN AVENUE NW
+## 10                           red    5337 WISCONSIN AVENUE NW
+## 11          blue, orange, silver            2301 I STREET NW
+## 12          blue, orange, silver          900 18TH STREET NW
+## 13                           red  1001 CONNECTICUT AVENUE NW
+## 14                           red         1525 20TH STREET NW
+## 15                           red         2700 24TH STREET NW
+## 16 grn, yllw, orange, blue, slvr      600 MARYLAND AVENUE SW
+## 17          blue, orange, silver 1200 INDEPENDENCE AVENUE SW
+## 18          blue, orange, silver          302 12TH STREET NW
+## 19                 green, yellow  701 PENNSYLVANIA AVENUE NW
+## 20                         green             399 M STREET SW
+## 21                         green             200 M STREET SE
+## 22          orange, blue, silver           401 3RD STREET SW
+## 23                           red             450 F STREET NW
+## 24          blue, orange, silver           355 1ST STREET SE
+## 25          blue, orange, silver            1400 I STREET NW
+## 26     red, blue, orange, silver          607 13TH STREET NW
+## 27            red, green, yellow             630 H STREET NW
+## 28                 green, yellow             700 M STREET NW
+## 29                 green, yellow            1300 U STREET NW
+## 30                 green, yellow          1701 8TH STREET NW
+## 31                           red           701 1ST STREET NE
+## 32                         green      1290 ALABAMA AVENUE SE
+## 33                         green         1101 HOWARD ROAD SE
+## 34          blue, orange, silver  701 PENNSYLVANIA AVENUE SE
+## 35          blue, orange, silver          700 14TH STREET SE
+## 36          blue, orange, silver          192 19TH STREET SE
+## 37                           red  919 RHODE ISLAND AVENUE NE
+## 38                        orange     400 MINNESOTA AVENUE NE
+## 39                           red  4200 CONNECTICUT AVENUE NW
+## 40                           red  3599 CONNECTICUT AVENUE NW
+##                          geometry
+## 1  POINT(-77.0325544130882 38....
+## 2  POINT(-77.0234631972137 38....
+## 3  POINT(-77.0181789925646 38....
+## 4  POINT(-76.9945365689642 38....
+## 5  POINT(-77.002205364201 38.9...
+## 6  POINT(-76.9383671319143 38....
+## 7  POINT(-76.9352590469192 38....
+## 8  POINT(-77.0030227321829 38....
+## 9  POINT(-77.0795896368441 38....
+## 10 POINT(-77.084998118688 38.9...
+## 11 POINT(-77.0502800382973 38....
+## 12 POINT(-77.0406977114452 38....
+## 13 POINT(-77.0397031233431 38....
+## 14 POINT(-77.0434166573705 38....
+## 15 POINT(-77.0524203221932 38....
+## 16 POINT(-77.0219107735302 38....
+## 17 POINT(-77.0280685258322 38....
+## 18 POINT(-77.0281342902871 38....
+## 19 POINT(-77.0219166779746 38....
+## 20 POINT(-77.0175074963564 38....
+## 21 POINT(-77.0050879350566 38....
+## 22 POINT(-77.0158705045136 38....
+## 23 POINT(-77.0166412451066 38....
+## 24 POINT(-77.0051417041544 38....
+## 25 POINT(-77.033636466218 38.9...
+## 26 POINT(-77.0280802893592 38....
+## 27 POINT(-77.0219176806835 38....
+## 28 POINT(-77.0219166711418 38....
+## 29 POINT(-77.027498186088 38.9...
+## 30 POINT(-77.0219139919702 38....
+## 31 POINT(-77.0074165779102 38....
+## 32 POINT(-76.9885142092577 38....
+## 33 POINT(-76.9953730185932 38....
+## 34 POINT(-76.996003408071 38.8...
+## 35 POINT(-76.9854975975333 38....
+## 36 POINT(-76.9770911770343 38....
+## 37 POINT(-76.9959392002222 38....
+## 38 POINT(-76.946750000542 38.8...
+## 39 POINT(-77.0629884863183 38....
+## 40 POINT(-77.0580448228721 38....
 ```
 
 ### Writing geojson
@@ -406,14 +397,7 @@ Using `raster()` is just as easy as `st_read()`
 
 
 ```r
-dc_elev <- raster("data/dc_ned.tif")
-```
-
-```
-## Error in .rasterObjectFromFile(x, band = band, objecttype = "RasterLayer", : Cannot create a RasterLayer object from this file. (file does not exist)
-```
-
-```r
+dc_elev <- raster(here("data/dc_ned.tif"))
 dc_elev
 ```
 

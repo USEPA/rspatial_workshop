@@ -29,9 +29,9 @@ Suffice it to say, it is really cool!
 Let's start working through some examples using the two Metro datasets.
 
 ```{r, echo=FALSE, message= FALSE}
-dc_metro <- st_read("data/Metro_Lines.shp", stringsAsFactors = FALSE)
-dc_metro_sttn <- st_read("data/metrostations.geojson", stringsAsFactors = FALSE)
-dc_elev <- raster("data/dc_ned.tif")
+dc_metro <- st_read(here("data/Metro_Lines.shp"), stringsAsFactors = FALSE)
+dc_metro_sttn <- st_read(here("data/metrostations.geojson"), stringsAsFactors = FALSE)
+dc_elev <- raster(here("data/dc_ned.tif"))
 ```
 
 We've already seen how to use the default print statements to look at the basics
@@ -79,7 +79,7 @@ Let's add some data. I found some ridership data for the different stations and 
 
 ```{r}
 # Read in ridership data
-station_rides <- read.csv("data/station_rides.csv", stringsAsFactors = FALSE)
+station_rides <- read.csv(here("data/station_rides.csv"), stringsAsFactors = FALSE)
 
 # Now a typical dplyr workflow
 dc_metro_sttn <- dc_metro_sttn %>%

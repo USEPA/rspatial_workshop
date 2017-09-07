@@ -25,23 +25,25 @@ Let's start working through some examples using the two Metro datasets.
 
 
 ```
-## Cannot open data source data/Metro_Lines.shp
+## Reading layer `Metro_Lines' from data source `C:\data\rspatial_workshop\data\Metro_Lines.shp' using driver `ESRI Shapefile'
+## converted into: LINESTRING
+## Simple feature collection with 8 features and 4 fields
+## geometry type:  MULTILINESTRING
+## dimension:      XY
+## bbox:           xmin: -77.08576 ymin: 38.83827 xmax: -76.91327 ymax: 38.97984
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
 ```
 
 ```
-## Error in CPL_read_ogr(dsn, layer, as.character(options), quiet, type, : Open failed.
-```
-
-```
-## Cannot open data source data/metrostations.geojson
-```
-
-```
-## Error in CPL_read_ogr(dsn, layer, as.character(options), quiet, type, : Open failed.
-```
-
-```
-## Error in .rasterObjectFromFile(x, band = band, objecttype = "RasterLayer", : Cannot create a RasterLayer object from this file. (file does not exist)
+## Reading layer `OGRGeoJSON' from data source `C:\data\rspatial_workshop\data\metrostations.geojson' using driver `GeoJSON'
+## converted into: POINT
+## Simple feature collection with 40 features and 6 fields
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: -77.085 ymin: 38.84567 xmax: -76.93526 ymax: 38.97609
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
 ```
 
 We've already seen how to use the default print statements to look at the basics
@@ -83,7 +85,7 @@ dc_metro_sttn
 ```
 
 ```
-## Simple feature collection with 40 features and 8 fields
+## Simple feature collection with 40 features and 6 fields
 ## geometry type:  POINT
 ## dimension:      XY
 ## bbox:           xmin: -77.085 ymin: 38.84567 xmax: -76.93526 ymax: 38.97609
@@ -171,47 +173,47 @@ dc_metro_sttn
 ## 38  http://wmata.com/rail/station_detail.cfm?station_id=64
 ## 39   http://wmata.com/rail/station_detail.cfm?station_id=9
 ## 40   http://wmata.com/rail/station_detail.cfm?station_id=8
-##                             LINE                     ADDRESS  X avg_wkday
-## 1                  green, yellow         3030 14TH STREET NW 17   12608.3
-## 2                  green, yellow      3700 GEORGIA AVENUE NW NA        NA
-## 3                            red         327 CEDAR STREET NW 72    6023.5
-## 4                            red      801 MICHIGAN AVENUE NE NA        NA
-## 5             red, green, yellow      550 GALLOWAY STREET NE 33    7442.0
-## 6           blue, orange, silver        4500 BENNING ROAD NE  6    3067.2
-## 7                         orange    4720 MINNESOTA AVENUE NE 21    1761.2
-## 8                            red       200 FLORIDA AVENUE NE NA        NA
-## 9                            red    4501 WISCONSIN AVENUE NW 73    7101.2
-## 10                           red    5337 WISCONSIN AVENUE NW 35    9519.0
-## 11          blue, orange, silver            2301 I STREET NW NA        NA
-## 12          blue, orange, silver          900 18TH STREET NW 28   22365.4
-## 13                           red  1001 CONNECTICUT AVENUE NW 27   26012.4
-## 14                           red         1525 20TH STREET NW 23   18291.8
-## 15                           red         2700 24TH STREET NW NA        NA
-## 16 grn, yllw, orange, blue, slvr      600 MARYLAND AVENUE SW NA        NA
-## 17          blue, orange, silver 1200 INDEPENDENCE AVENUE SW 68   11671.6
-## 18          blue, orange, silver          302 12TH STREET NW 30    9703.1
-## 19                 green, yellow  701 PENNSYLVANIA AVENUE NW NA        NA
-## 20                         green             399 M STREET SW 81    4440.0
-## 21                         green             200 M STREET SE NA        NA
-## 22          orange, blue, silver           401 3RD STREET SW 29    6352.1
-## 23                           red             450 F STREET NW NA        NA
-## 24          blue, orange, silver           355 1ST STREET SE 12    8630.3
-## 25          blue, orange, silver            1400 I STREET NW NA        NA
-## 26     red, blue, orange, silver          607 13TH STREET NW 49   28199.5
-## 27            red, green, yellow             630 H STREET NW NA        NA
-## 28                 green, yellow             700 M STREET NW NA        NA
-## 29                 green, yellow            1300 U STREET NW NA        NA
-## 30                 green, yellow          1701 8TH STREET NW NA        NA
-## 31                           red           701 1ST STREET NE 76   32611.1
-## 32                         green      1290 ALABAMA AVENUE SE 18    2912.2
-## 33                         green         1101 HOWARD ROAD SE  2    7356.4
-## 34          blue, orange, silver  701 PENNSYLVANIA AVENUE SE 25    6038.7
-## 35          blue, orange, silver          700 14TH STREET SE NA        NA
-## 36          blue, orange, silver          192 19TH STREET SE NA        NA
-## 37                           red  919 RHODE ISLAND AVENUE NE NA        NA
-## 38                        orange     400 MINNESOTA AVENUE NE NA        NA
-## 39                           red  4200 CONNECTICUT AVENUE NW 78    6624.4
-## 40                           red  3599 CONNECTICUT AVENUE NW 15    4637.5
+##                             LINE                     ADDRESS
+## 1                  green, yellow         3030 14TH STREET NW
+## 2                  green, yellow      3700 GEORGIA AVENUE NW
+## 3                            red         327 CEDAR STREET NW
+## 4                            red      801 MICHIGAN AVENUE NE
+## 5             red, green, yellow      550 GALLOWAY STREET NE
+## 6           blue, orange, silver        4500 BENNING ROAD NE
+## 7                         orange    4720 MINNESOTA AVENUE NE
+## 8                            red       200 FLORIDA AVENUE NE
+## 9                            red    4501 WISCONSIN AVENUE NW
+## 10                           red    5337 WISCONSIN AVENUE NW
+## 11          blue, orange, silver            2301 I STREET NW
+## 12          blue, orange, silver          900 18TH STREET NW
+## 13                           red  1001 CONNECTICUT AVENUE NW
+## 14                           red         1525 20TH STREET NW
+## 15                           red         2700 24TH STREET NW
+## 16 grn, yllw, orange, blue, slvr      600 MARYLAND AVENUE SW
+## 17          blue, orange, silver 1200 INDEPENDENCE AVENUE SW
+## 18          blue, orange, silver          302 12TH STREET NW
+## 19                 green, yellow  701 PENNSYLVANIA AVENUE NW
+## 20                         green             399 M STREET SW
+## 21                         green             200 M STREET SE
+## 22          orange, blue, silver           401 3RD STREET SW
+## 23                           red             450 F STREET NW
+## 24          blue, orange, silver           355 1ST STREET SE
+## 25          blue, orange, silver            1400 I STREET NW
+## 26     red, blue, orange, silver          607 13TH STREET NW
+## 27            red, green, yellow             630 H STREET NW
+## 28                 green, yellow             700 M STREET NW
+## 29                 green, yellow            1300 U STREET NW
+## 30                 green, yellow          1701 8TH STREET NW
+## 31                           red           701 1ST STREET NE
+## 32                         green      1290 ALABAMA AVENUE SE
+## 33                         green         1101 HOWARD ROAD SE
+## 34          blue, orange, silver  701 PENNSYLVANIA AVENUE SE
+## 35          blue, orange, silver          700 14TH STREET SE
+## 36          blue, orange, silver          192 19TH STREET SE
+## 37                           red  919 RHODE ISLAND AVENUE NE
+## 38                        orange     400 MINNESOTA AVENUE NE
+## 39                           red  4200 CONNECTICUT AVENUE NW
+## 40                           red  3599 CONNECTICUT AVENUE NW
 ##                          geometry
 ## 1  POINT(-77.0325544130882 38....
 ## 2  POINT(-77.0234631972137 38....
@@ -263,7 +265,7 @@ head(dc_metro_sttn)
 ```
 
 ```
-## Simple feature collection with 6 features and 8 fields
+## Simple feature collection with 6 features and 6 fields
 ## geometry type:  POINT
 ## dimension:      XY
 ## bbox:           xmin: -77.03255 ymin: 38.89098 xmax: -76.93837 ymax: 38.97609
@@ -283,13 +285,13 @@ head(dc_metro_sttn)
 ## 4 http://wmata.com/rail/station_detail.cfm?station_id=27
 ## 5 http://wmata.com/rail/station_detail.cfm?station_id=28
 ## 6 http://wmata.com/rail/station_detail.cfm?station_id=90
-##                   LINE                ADDRESS  X avg_wkday
-## 1        green, yellow    3030 14TH STREET NW 17   12608.3
-## 2        green, yellow 3700 GEORGIA AVENUE NW NA        NA
-## 3                  red    327 CEDAR STREET NW 72    6023.5
-## 4                  red 801 MICHIGAN AVENUE NE NA        NA
-## 5   red, green, yellow 550 GALLOWAY STREET NE 33    7442.0
-## 6 blue, orange, silver   4500 BENNING ROAD NE  6    3067.2
+##                   LINE                ADDRESS
+## 1        green, yellow    3030 14TH STREET NW
+## 2        green, yellow 3700 GEORGIA AVENUE NW
+## 3                  red    327 CEDAR STREET NW
+## 4                  red 801 MICHIGAN AVENUE NE
+## 5   red, green, yellow 550 GALLOWAY STREET NE
+## 6 blue, orange, silver   4500 BENNING ROAD NE
 ##                         geometry
 ## 1 POINT(-77.0325544130882 38....
 ## 2 POINT(-77.0234631972137 38....
@@ -311,22 +313,12 @@ summary(dc_metro_sttn)
 ##  Mean   :20.50                                                           
 ##  3rd Qu.:30.25                                                           
 ##  Max.   :40.00                                                           
-##                                                                          
-##      LINE             ADDRESS                X           avg_wkday    
-##  Length:40          Length:40          Min.   : 2.00   Min.   : 1761  
-##  Class :character   Class :character   1st Qu.:18.75   1st Qu.: 6027  
-##  Mode  :character   Mode  :character   Median :28.50   Median : 7399  
-##                                        Mean   :37.18   Mean   :11062  
-##                                        3rd Qu.:63.25   3rd Qu.:12374  
-##                                        Max.   :81.00   Max.   :32611  
-##                                        NA's   :18      NA's   :18     
-##           geometry 
-##  POINT        :40  
-##  epsg:4326    : 0  
-##  +proj=long...: 0  
-##                    
-##                    
-##                    
+##      LINE             ADDRESS                   geometry 
+##  Length:40          Length:40          POINT        :40  
+##  Class :character   Class :character   epsg:4326    : 0  
+##  Mode  :character   Mode  :character   +proj=long...: 0  
+##                                                          
+##                                                          
 ## 
 ```
 
@@ -335,8 +327,8 @@ names(dc_metro_sttn)
 ```
 
 ```
-## [1] "OBJECTID"  "GIS_ID"    "NAME"      "WEB_URL"   "LINE"      "ADDRESS"  
-## [7] "X"         "avg_wkday" "geometry"
+## [1] "OBJECTID" "GIS_ID"   "NAME"     "WEB_URL"  "LINE"     "ADDRESS" 
+## [7] "geometry"
 ```
 
 ```r
@@ -397,7 +389,7 @@ est_mrkt
 ```
 
 ```
-## Simple feature collection with 1 feature and 8 fields
+## Simple feature collection with 1 feature and 6 fields
 ## geometry type:  POINT
 ## dimension:      XY
 ## bbox:           xmin: -76.996 ymin: 38.88463 xmax: -76.996 ymax: 38.88463
@@ -407,8 +399,8 @@ est_mrkt
 ## 34       34 mstn_011 Eastern Market
 ##                                                   WEB_URL
 ## 34 http://wmata.com/rail/station_detail.cfm?station_id=60
-##                    LINE                    ADDRESS  X avg_wkday
-## 34 blue, orange, silver 701 PENNSYLVANIA AVENUE SE 25    6038.7
+##                    LINE                    ADDRESS
+## 34 blue, orange, silver 701 PENNSYLVANIA AVENUE SE
 ##                          geometry
 ## 34 POINT(-76.996003408071 38.8...
 ```
@@ -420,7 +412,7 @@ ri
 ```
 
 ```
-## Simple feature collection with 1 feature and 8 fields
+## Simple feature collection with 1 feature and 6 fields
 ## geometry type:  POINT
 ## dimension:      XY
 ## bbox:           xmin: -76.99594 ymin: 38.92107 xmax: -76.99594 ymax: 38.92107
@@ -430,8 +422,8 @@ ri
 ## 37       37 mstn_030 Rhode Island Ave
 ##                                                   WEB_URL LINE
 ## 37 http://wmata.com/rail/station_detail.cfm?station_id=26  red
-##                       ADDRESS  X avg_wkday                       geometry
-## 37 919 RHODE ISLAND AVENUE NE NA        NA POINT(-76.9959392002222 38....
+##                       ADDRESS                       geometry
+## 37 919 RHODE ISLAND AVENUE NE POINT(-76.9959392002222 38....
 ```
 
 This is cool, but even better is our ability to use `dplyr` for this type of work.
@@ -448,7 +440,7 @@ red_line_sttn
 ```
 
 ```
-## Simple feature collection with 16 features and 8 fields
+## Simple feature collection with 16 features and 6 fields
 ## geometry type:  POINT
 ## dimension:      XY
 ## bbox:           xmin: -77.085 ymin: 38.84567 xmax: -76.93526 ymax: 38.97609
@@ -488,23 +480,23 @@ red_line_sttn
 ## 14  http://wmata.com/rail/station_detail.cfm?station_id=26
 ## 15   http://wmata.com/rail/station_detail.cfm?station_id=9
 ## 16   http://wmata.com/rail/station_detail.cfm?station_id=8
-##                         LINE                    ADDRESS  X avg_wkday
-## 1                        red        327 CEDAR STREET NW 72    6023.5
-## 2                        red     801 MICHIGAN AVENUE NE NA        NA
-## 3         red, green, yellow     550 GALLOWAY STREET NE 33    7442.0
-## 4                        red      200 FLORIDA AVENUE NE NA        NA
-## 5                        red   4501 WISCONSIN AVENUE NW 73    7101.2
-## 6                        red   5337 WISCONSIN AVENUE NW 35    9519.0
-## 7                        red 1001 CONNECTICUT AVENUE NW 27   26012.4
-## 8                        red        1525 20TH STREET NW 23   18291.8
-## 9                        red        2700 24TH STREET NW NA        NA
-## 10                       red            450 F STREET NW NA        NA
-## 11 red, blue, orange, silver         607 13TH STREET NW 49   28199.5
-## 12        red, green, yellow            630 H STREET NW NA        NA
-## 13                       red          701 1ST STREET NE 76   32611.1
-## 14                       red 919 RHODE ISLAND AVENUE NE NA        NA
-## 15                       red 4200 CONNECTICUT AVENUE NW 78    6624.4
-## 16                       red 3599 CONNECTICUT AVENUE NW 15    4637.5
+##                         LINE                    ADDRESS
+## 1                        red        327 CEDAR STREET NW
+## 2                        red     801 MICHIGAN AVENUE NE
+## 3         red, green, yellow     550 GALLOWAY STREET NE
+## 4                        red      200 FLORIDA AVENUE NE
+## 5                        red   4501 WISCONSIN AVENUE NW
+## 6                        red   5337 WISCONSIN AVENUE NW
+## 7                        red 1001 CONNECTICUT AVENUE NW
+## 8                        red        1525 20TH STREET NW
+## 9                        red        2700 24TH STREET NW
+## 10                       red            450 F STREET NW
+## 11 red, blue, orange, silver         607 13TH STREET NW
+## 12        red, green, yellow            630 H STREET NW
+## 13                       red          701 1ST STREET NE
+## 14                       red 919 RHODE ISLAND AVENUE NE
+## 15                       red 4200 CONNECTICUT AVENUE NW
+## 16                       red 3599 CONNECTICUT AVENUE NW
 ##                          geometry
 ## 1  POINT(-77.0181789925646 38....
 ## 2  POINT(-76.9945365689642 38....
@@ -529,19 +521,8 @@ Let's add some data. I found some ridership data for the different stations and 
 
 ```r
 # Read in ridership data
-station_rides <- read.csv("data/station_rides.csv", stringsAsFactors = FALSE)
-```
+station_rides <- read.csv(here("data/station_rides.csv"), stringsAsFactors = FALSE)
 
-```
-## Warning in file(file, "rt"): cannot open file 'data/station_rides.csv': No
-## such file or directory
-```
-
-```
-## Error in file(file, "rt"): cannot open the connection
-```
-
-```r
 # Now a typical dplyr workflow
 dc_metro_sttn <- dc_metro_sttn %>% left_join(station_rides, by = c(NAME = "Ent.Station"))
 ```
@@ -555,7 +536,7 @@ busy_sttn <- dc_metro_sttn %>% filter(avg_wkday > 10000) %>% select(name = NAME,
 ```
 
 ```
-## Error in filter_impl(.data, quo): Evaluation error: object 'avg_wkday' not found.
+## Error in select.sf(., name = NAME, line = LINE, ridership = avg_wkday): requires dplyr > 0.5.0: install that first, then reinstall sf
 ```
 
 ```r
@@ -593,13 +574,6 @@ Lastly, we can do some aggregation with `dplyr`.  Say we wanted to estimate tota
 ```r
 dc_metro_stn_summ <- dc_metro_sttn %>% group_by(LINE) %>% summarize(total_week_avg_ridership = sum(avg_wkday, 
     na.rm = TRUE)) %>% arrange(desc(total_week_avg_ridership))
-```
-
-```
-## Error in summarise_impl(.data, dots): Evaluation error: object 'avg_wkday' not found.
-```
-
-```r
 dc_metro_stn_summ
 ```
 
