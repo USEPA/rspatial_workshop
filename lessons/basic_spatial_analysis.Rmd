@@ -1,19 +1,18 @@
 ```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
 options(repos="http://cran.rstudio.com/")
-pkgs <- c("sp","rgdal","rgeos","raster","knitr")
+pkgs <- c("sp","rgdal","rgeos","raster","knitr","sf","tidyverse","here")
 x<-lapply(pkgs, library, character.only = TRUE)
 opts_chunk$set(tidy=T)
 ```
 
 # Basic GIS Analysis with R
-We now have the required packages installed and know how to read data into R. Our next step is to start doing some GIS analysis with R. Throughout the course of this lesson will show how to do some basic manipulation of the `raster` and `sp` objects and then show a few examples of relatively straightforward analyses.  We will only be scratching the surface here, but hopefully this will provide a starting point for more work doing spatial analysis in R.  ***Note:*** *Much of this lesson assumes some familiarity with R and working with data frames.*
+We now have the required packages installed and know how to read data into R. Our next step is to start doing some GIS analysis with R. Throughout the course of this lesson will show how to do some basic manipulation of the `raster` and `sf` objects and then show a few examples of relatively straightforward analyses.  We will only be scratching the surface here, but hopefully this will provide a starting point for more work doing spatial analysis in R.  ***Note:*** *Much of this lesson assumes familiarity with R and working with data frames.*
 
 ## Lesson Outline
 - [Explore and manipulate](#explore-and-manipulate)
 - [Projections](#projections)
 - [Brief introduction to rgeos](#brief-introduction-to-rgeos)
 - [Working with rasters](#working-with-rasters)
-- [Other geospatial packages](#other-geospatial-packages)
 
 ## Lesson Exercises
 - [Exercise 3.1](#exercise-31)
@@ -21,13 +20,17 @@ We now have the required packages installed and know how to read data into R. Ou
 - [Exercise 3.3](#exercise-33)
 
 ## Explore and manipulate
-One of the nice things about `SpatialXDataFrame` objects is that many of the tricks you know for working with data frames will also work.  This allows us to subset our spatial data, summarize data, etc. in a very R like way.
+The greatest thing about the `sf` objects is that the tricks you know for working with data frames will also work. This is becuase `sf` objects are data frames that hold the geographic information in a special list-column.  In addition to being data frames, `sf` was designed to work with the [`tidyverse`](https://tidyverse.org) and are organized as [tidy data.](http://vita.had.co.nz/papers/tidy-data.html)  This allows us to subset our spatial data, summarize data, etc. using the tools in the `tidyverse`, most notabley `dplyr`.  If you haven't worked with spatial data in R the "old way", then you can't fully appreciate how much this should:
+
+![](https://media.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif)
+
+Suffice it to say, it is really cool!
 
 Let's start working through some examples using the two Metro datasets.
 
-```{r, echo=FALSE}
-dc_metro <- readOGR("data","Metro_Lines")
-dc_metro_sttn <- readOGR("data/metrostations.geojson", "OGRGeoJSON")
+```{r, echo=FALSE, message= FALSE}
+dc_metro <- st_read("data/Metro_Lines.shp", stringsAsFactors = FALSE)
+dc_metro_sttn <- st_read("data/metrostations.geojson", stringsAsFactors = FALSE)
 dc_elev <- raster("data/dc_ned.tif")
 ```
 
@@ -38,7 +41,7 @@ dc_metro
 dc_metro_sttn
 ```
 
-We can get more info on the data with:
+We can get more info on the data with are usually data frame tools:
 
 ```{r}
 head(dc_metro_sttn)
@@ -48,15 +51,7 @@ names(dc_metro_sttn)
 dc_metro_sttn$NAME
 ```
 
-And to get into the guts of the `sp` objects:
-
-```{r}
-str(dc_metro)
-```
-
-Yikes!
-
-Now for the fun part.  We can use indexing/subsetting tools we already know to pull out individual features based on the data stored in the `sp` objects data frame.  For instance:
+Now for the fun part.  If you use base R mostly, then you can use indexing/subsetting tools you already know to pull out individual features based on the data stored in the `sf` objects.  For instance:
 
 ```{r}
 #select with base indexing
@@ -65,27 +60,54 @@ est_mrkt
 #select with subset (plus a Lil Rhody Shout Out!)
 ri <- subset(dc_metro_sttn,NAME == "Rhode Island Ave")
 ri
-#select multiple items
-red_line_sttn <- subset(dc_metro_sttn,grepl("red",LINE))
+```
+
+This is cool, but even better is our ability to use `dplyr` for this type of work.
+
+ 
+```{r}
+# Need to add dplyr
+library(dplyr)
+
+# Let's get just the Red Line Stations
+red_line_sttn <- dc_metro_sttn %>%
+  filter(grepl("red",LINE))
 red_line_sttn
 ```
 
-Adding data is just the same as for adding data to data frames.  I found some ridership data for the different stations and summarized that, by station, into "station_rides.csv".  Let's pull that in, and add it to `dc_metro_sttn`.  
+Let's add some data. I found some ridership data for the different stations and summarized that, by station, into "station_rides.csv".  Let's pull that in, and add it to `dc_metro_sttn`. 
 
 ```{r}
-station_rides <- read.csv("data/station_rides.csv")
-dc_metro_sttn<-merge(dc_metro_sttn,station_rides,
-                     by.x="NAME",by.y="Ent.Station",all.x=TRUE)
-head(dc_metro_sttn)
+# Read in ridership data
+station_rides <- read.csv("data/station_rides.csv", stringsAsFactors = FALSE)
+
+# Now a typical dplyr workflow
+dc_metro_sttn <- dc_metro_sttn %>%
+  left_join(station_rides,by = c("NAME" = "Ent.Station"))
 ```
 
-So, now we can use these values to select.
+So, now we can use these values to filter our dataset, perhaps to just the stations with average ridership greater than 10000.
 
 ```{r}
-busy_sttn <- subset(dc_metro_sttn,avg_wkday >= 10000)
+busy_sttn <- dc_metro_sttn %>%
+  filter(avg_wkday > 10000) %>%
+  select(name = NAME, line = LINE, ridership = avg_wkday)
 busy_sttn
 ```
 
+Lastly, we can do some aggregation with `dplyr`.  Say we wanted to estimate total average weekly riders on the different line/line combinations.
+
+```{r}
+dc_metro_stn_summ <- dc_metro_sttn %>%
+  group_by(LINE) %>%
+  summarize(total_week_avg_ridership = sum(avg_wkday, na.rm = TRUE)) %>%
+  arrange(desc(total_week_avg_ridership))
+dc_metro_stn_summ
+```
+
+Key thing to point out here is that not only have we aggregated and summarized the numeric values, but the spatial data has been aggregated into a MULTIPOINT object as well.  This works equally as well for lines and polygons (whoa!)
+
+We have just scratched the surface on the spatial data manipulation with `sf` and `dplyr` but suffice it to say, anything you can imagine doing in your desktop GIS, we can also easily (and in many cases), more quickly do that with a reproducible R script.
 
 ## Projections
 Although many GIS provide project-on-the-fly (jwh editorial: WORST THING EVER), R does not.  To get our maps to work and analysis to be correct, we need to know how to modify the projections of our data so that they match up.  A description of projections is way beyond the scope of this workshop, but these links provide some good background info and details:
@@ -95,87 +117,87 @@ Although many GIS provide project-on-the-fly (jwh editorial: WORST THING EVER), 
 
 And for more on projecting there's some good info in the [rOpenSci draft spatial data viz Task View](https://github.com/ropensci/maptools#projecting-data)
 
-For our purposes we will be using `spTransform` to reproject data.  We need to supply two arguments, "x", the object we are transforming, and "CRSobj" which is the details of the new projection.  We will assume that we have good data read into R and that the original projection is already defined.  This is the case with all of the example data.
+For our purposes we will be using `st_transform()` to reproject data.  We need to supply two arguments, "x", the object we are transforming, and either an [EPSG code](http://www.epsg-registry.org/) or a character with a [Proj.4](https://trac.osgeo.org/proj/) string.  We will assume that we have good data read into R and that the original projection is already defined.  This is the case with all of the example data.  Be careful using data that do not have a coordinate reference system defined!
 
-There are many ways to specify the "CRSobj".  We will be using [Proj.4](https://trac.osgeo.org/proj/) strings and the `CRS` function for this.  We can get the Proj.4 strings from other datasets, or specify them from scratch.  To get them from scratch, the easiest thing to do is search at [spatialreference.org](http://spatialreference.org/).  You can either search there, or just use Google.  For instance, if we want the [ESRI Albers Equal Area projection as Proj.4](www.google.com/search?q=ESRI Albers Equal Area projection as Proj.4) gets it as the first result.  Just select the [Proj4](http://spatialreference.org/ref/esri/usa-contiguous-albers-equal-area-conic/proj4/) link from the list.
+For our examples, we will be using [Proj.4](https://trac.osgeo.org/proj/) strings.  We can get the Proj.4 strings from other datasets, or specify them from scratch.  To get them from scratch, the easiest thing to do is search at [spatialreference.org](http://spatialreference.org/).  You can either search there, or just use Google.  For instance, if we want the [ESRI Albers Equal Area projection as Proj.4](www.google.com/search?q=ESRI Albers Equal Area projection as Proj.4) gets it as the first result.  Just select the [Proj4](http://spatialreference.org/ref/esri/usa-contiguous-albers-equal-area-conic/proj4/) link from the list.
 
-So, if we want to reproject our data using this projection:
+We can pull them from existing `sf` objects like:
 
 ```{r}
-esri_alb_p4 <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
-dc_metro_alb <- spTransform(dc_metro,
-                CRS(esri_alb_p4))
+st_crs(dc_metro)$proj4string
+```
+
+So, let's reproject our data using the Albers projection stored in the `dc_nlcd` raster.  It is a `raster` object and not `sf` so it needs to be accessed with `proj4string()`
+
+```{r}
+esri_alb_p4 <- proj4string(dc_nlcd)
+dc_metro_alb <- st_transform(dc_metro,esri_alb_p4)
+plot(st_geometry(dc_metro_alb))
 ```
 
 Luckily, it is pretty common to have several datasets with one of which in the projections you want to use.  We can then just pull the Proj4 string from that.
 
 ```{r}
-dc_metro_sttn_prj <- spTransform(dc_metro_sttn,
-                                 CRS(proj4string(dc_metro_alb))) 
+dc_metro_sttn_alb <- st_transform(dc_metro_sttn,
+                                  st_crs(dc_metro_alb)$proj4string) 
 ```
 
-Projecting rasters is a bit different.  We will use `raster::projectRaster` to accomplish this. Be aware that this is looking for a Proj4 string for the "crs", and not a CRSobj.  
+Projecting rasters is a bit different.  We will use `raster::projectRaster` to accomplish this.   
 
 ```{r,eval=TRUE}
-dc_elev_prj <- projectRaster(dc_elev,crs=proj4string(dc_metro_sttn_prj))
+dc_elev_alb <- projectRaster(dc_elev,crs=st_crs(dc_metro_alb)$proj4string)
 ```
 
 ## Exercise 3.1
 In this first exercise we will work on manipulating the Tiger Lines file of the states that we pulled in as part of lesson 2 and assigned to `us_states`.
 
-1. Assign just the DC boundary to an object named `dc_bnd`.
-2. Re-project `dc_bnd` to match the projection of `dc_nlcd`.  Assign this to an object named `dc_bnd_prj`.
+1. Using `filter()` from `dplyr`, filter out the DC boundary and assign it to an object named `dc_bnd`.
+2. Re-project `dc_bnd` to match the projection of `dc_metro_alb` (created in examples above).  Assign this to an object named `dc_bnd_alb`.
 
-## Brief introduction to rgeos
-In this section we are going to start working with many of the "typical" GIS type analyses, specifically buffers and a few overlays. We will use mostly `rgeos` but will also look a bit at `sp::over`.
+## Brief introduction to geospatial analyis with GEOS
+
+In this section we are going to start working with many of the "typical" GIS type analyses, specifically buffers and a few overlays. We will use only tools from `sf` for this.  These tools use the [GEOS](https://trac.osgeo.org/geos) libraries that are installed with `sf` (if you are using Windows)
 
 Let's start with a buffer. We will use the albers projected stations for these examples
 
 ```{r}
-sttn_buff_500 <- gBuffer(dc_metro_sttn_prj,width=500)
-plot(sttn_buff_500)
+sttn_buff_500 <- st_buffer(dc_metro_sttn_alb,dist = 500)
+plot(st_geometry(sttn_buff_500))
 ```
 
-We can see that overlapping buffers merged in this case.  If we wanted a buffer for each station we can use the "byid" argument.
+We get a 500 meter circle around each of the stations.  
 
-```{r}
-sttn_buff_500_id <- gBuffer(dc_metro_sttn_prj,width=500,byid = TRUE)
-plot(sttn_buff_500_id)
-```
-
-Now we get a 500 meter circle around each of the stations.  Let's move on to one of the overlay commands in `rgeos`,the difference.
+Let's say we wanted land area that was 100 to 500 meters away from a Metro Station.  We used combine buffer, union, and difference to do this. 
 
 ```{r diff}
-#Create something to take difference of
-sttn_buff_100 <- gBuffer(dc_metro_sttn_prj,width = 100)
-sttn_diff <- gDifference(sttn_buff_500,sttn_buff_100)
-sttn_diff
-#pulls into individual polygons, instead of a single multi-polygon.
-sttn_diff <- disaggregate(sttn_diff)
-sttn_diff
-plot(sttn_diff)
+# Get 100 meters out
+# st_union merges into one.
+sttn_buff_100 <- st_buffer(dc_metro_sttn_alb,dist = 100) %>%
+  st_union() 
+sttn_buff_500 <- st_buffer(dc_metro_sttn_alb, dist = 500) %>%
+  st_union()
+sttn_100_to_500 <- st_difference(sttn_buff_500, sttn_buff_100)
+plot(sttn_100_to_500)
 ```
 
-Lastly, let's pull out some of the basic geographic info on our datasets using `rgeos`.  That is provided by `gArea` and `gLength`. Let's get the area and perimeter of the all the land 500 meters from a metro station
+Lastly, let's pull out some of the basic geographic info on our datasets using `st_area` and `st_length`. Let's get the area and perimeter of the all the land 100 to 500 meters from a metro station
 
 ``` {r}
-gLength(sttn_diff)
-gArea(sttn_diff)
-#likely want area of each poly
-gArea(sttn_diff,byid=TRUE)
+st_area(sttn_100_to_500)
+st_length(sttn_100_to_500)
 ```
 
-We have left most of `rgeos` untouched, but hopefully shown enough to get you started.  
+Again, this is a very, very small portion of the GISy things you can do with `sf` but hopefully is enough to get you started.
 
 ## Exercise 3.2
 We will work with the re-projected `dc_bnd_prj` lets set this up for some further analysis.
 
 1. Buffer the DC boundary by 1000 meters. Save it to dc_bnd_1000
-2. Assign an object that represents only the area 1000 meters outside of DC (hint: gDifference).
+2. Assign an object that represents only the area 1000 meters outside of DC (hint: `st_difference()`).
 3. Determine the area of both the DC boundary as well as just the surrounding 1000 meters.
 
 ## Working with rasters
-Let's move on to rasters.  We will be doing mostly work with base R to summarize information stored in rasters and use our vector datasets to interact with those rasters and then we will show a few functions from `raster`.
+Let's move on to rasters.  We will be doing mostly work with base R to summarize information stored in rasters and use our vector datasets (will require some gymnastics since `sf` is newer than `raster`) to interact with those rasters and then we will show a few functions from `raster`.
 
 We've already seen how to get some of the basic info of a raster.  To re-hash:
 
@@ -188,7 +210,7 @@ This gives us the basics.  There are many options for looking at the values stor
 For instance, mean elevation in `dc_elev` could be calculated with 
 
 ```{r}
-mean(values(dc_elev),na.omit=T)
+mean(values(dc_elev),na.omit=TRUE)
 ```
 
 If our raster contains categorical data (e.g. LULC), we can work with that too.  We don't have a ready example so lets use another `raster` function to reclassify our elevation data and then look at some summary stats of that.
@@ -215,8 +237,10 @@ elev_class_perc
 
 The last task we will show is using vector to data to clip out our raster data.  We can do this with crop and mask.  We do the crop first as it will subset our raster based on the extent.  In most cases this is a significantly smaller area than the full raster dataset and speeds up the subsequent mask. We will do this with the projected versions.
 
+As I mentioned above, to get this to work we will need to do some extra work becuase `raster` doesn't now what an `sf` object is.  Luckily, there are tools in `sf` for us to convert from `sf` to `sp`, specifically `as()`  
+
 ```{r}
-dc_elev_crop <- crop(dc_elev_prj,sttn_buff_500)
+dc_elev_crop <- crop(dc_elev_alb,as(sttn_buff_500,"Spatial"))
 plot(dc_elev_crop)
 plot(sttn_buff_500,add=T)
 ```
@@ -224,9 +248,18 @@ plot(sttn_buff_500,add=T)
 So, with this limited to just the extent of our dataset we can now clip out the values for each of the circles with.
 
 ```{r}
-dc_elev_sttns <- mask(dc_elev_crop,sttn_buff_500)
+dc_elev_sttns <- mask(dc_elev_crop,as(sttn_buff_500, "Spatial"))
 plot(dc_elev_sttns)
 plot(sttn_buff_500,add=T,border="red",lwd=2)
+```
+
+```{r}
+x %>% 
+  slice(1:3) %>%
+  group_by(NAME) %>%
+  summarize(sttn_median_elev = median(values(mask(crop(dc_elev_alb,
+                                                       as(.$geometry, "Spatial")), 
+                                                  as(.$geometry, "Spatial"))),na.rm=TRUE))
 ```
 
 That gives us just the elevation within 500 meters of the Metro stations.  Probably not really interesting information, but we have it!  It might be more interesting to get the average elevation of each metro station.  Our workflow would be different as we would need to look at this on a per-station basis.  Might require a loop or a different approach all together.  Certainly possible, but beyond what we have time for today.
@@ -238,11 +271,5 @@ Let's combine all of this together and calculate some landcover summary statisti
 2. Clip out the NLCD from the surrounding 1000 meters.
 3. Summarize the land use/land cover statistics and report percent of each landcover type both within the DC boundary and within the surrounding 1000 meters.
 
-## Other Geospatial packages
-In this section, I'll introduce a few other packages that I have used or know about that provide some common analyses that may not be readily available via the base packages.  For a complete annotated listing though, the [CRAN Spatial Analysis Task View](https://cran.r-project.org/web/views/Spatial.html) should be your first stop.  The task view provides a full list of packages for working with spatial data, geostatistics, spatial regression, etc.  
 
-Some of the other packages I have used for various tasks have been:
-- [gdistance](https://cran.r-project.org/web/packages/gdistance/index.html): Provides tools for calculating distances across a grid.  Computes things like cost distance, accumulate costs, shortest path, etc. The [vignette for gdistance](https://cran.r-project.org/web/packages/gdistance/vignettes/gdistance1.pdf) is a good place to start for an overview of the package.
-- [geosphere](https://cran.r-project.org/web/packages/geosphere/index.html): `geosphere` provides tools for spherical trigonometry and allows working directly with latitude, longitude, and bearing.  For more, look at the [vignette](https://cran.r-project.org/web/packages/geosphere/vignettes/geosphere.pdf).
-- [SDMTools](https://cran.r-project.org/web/packages/SDMTools/index.html): This package provides functions to work with species distribution models.  In addition though, it also has implementations of most of the metrics available in the venerable landscape ecology tool, [FRAGSTATS](http://www.umass.edu/landeco/research/fragstats/fragstats.html).
 

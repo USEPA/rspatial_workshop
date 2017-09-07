@@ -67,7 +67,7 @@ unzip(here("data/data.zip"), exdir = here("data"), overwrite = TRUE)
 
 
 ## Vector data: shapefiles
-For many, shapefiles are going to be the most common way to interact with spatial data.  With `sf`, reading in in shapefiles is straightforward via the `st_read()` function
+For many, shapefiles are going to be the most common way to interact with spatial data.  With `sf`, reading in in shapefiles is straightforward via the `st_read()` function.
 
 ```{r read_shp}
 dc_metro <- st_read("data/Metro_Lines.shp")
@@ -76,10 +76,11 @@ dc_metro <- st_read("data/Metro_Lines.shp")
 We will get more into working with `sf` object and visualizing spatial data later, but just to prove that this did something:
 
 ```{r metro_chk}
-summary(dc_metro)
+dc_metro
 plot(dc_metro)
 ```
 
+The spatial data types that `sf` recognizes follow the general concept of points, lines and polygons.  You can see for this that the Metro Lines are read in as a MUTLILINESTRING.  Details on these are beyond what we can cover in this short workshop, but the `sf` documentation does a good job, in particular the [Simple Features in R vignette](https://r-spatial.github.io/sf/articles/sf1.html).
 
 ### Writing shapefiles
 
