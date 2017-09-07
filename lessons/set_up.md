@@ -1,11 +1,4 @@
 
-```
-## Error: package 'sp' required by 'raster' could not be found
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'opts_chunk' not found
-```
  
 # Setting up R to do GIS
 Out of the box, R is not ready to do GIS analysis.  As such, we need to add a few packages that will provide most of the functionality you'd expect out of a GIS.  In this lesson we will introduce the bare minimum packages for doing GIS.
@@ -68,9 +61,10 @@ Getting set up on Linux or Mac requires more effort (i.e. need to have GDAL inst
 ## Exercise 1.1
 The first exercise won't be too thrilling, but we need to make sure everyone has the four packages installed. 
 
-1. Install `sf` and load `sf` into your library.
-2. Repeat, with `raster` `sp`, and `rgdal`.
-3. Also install `dplyr` as we will use that for spatial data manipulation.
+1. Install `dplyr` first. We will use that for spatial data manipulation and the version of it you have determines what gets installed with `sf`.
+2. Install `sf` and load `sf` into your library.
+3. Repeat, with `raster` `sp`, and `rgdal`.
+
 
 
 ## Interacting with an external GIS

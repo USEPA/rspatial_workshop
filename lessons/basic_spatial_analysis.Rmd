@@ -2,7 +2,7 @@
 options(repos="http://cran.rstudio.com/")
 pkgs <- c("sp","rgdal","rgeos","raster","knitr","sf","tidyverse","here")
 x<-lapply(pkgs, library, character.only = TRUE)
-opts_chunk$set(tidy=T)
+opts_chunk$set(tidy=FALSE)
 ```
 
 # Basic GIS Analysis with R
