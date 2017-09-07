@@ -1,6 +1,6 @@
-```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
+```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE, error=FALSE}
 options(repos="http://cran.rstudio.com/")
-pkgs <- c("sp","rgdal","rgeos","raster","knitr")
+pkgs <- c("sp","rgdal","rgeos","raster","knitr", "sf")
 x<-lapply(pkgs, library, character.only = TRUE)
 opts_chunk$set(tidy=T)
 ```
@@ -10,8 +10,8 @@ So, now that we have the base packages installed and loaded we can work on getti
 
 ## Lesson Outline
 - [Vector data: shapefiles](#vector-data-shapefiles)
-- [Vector data: file geodatabase](#vector-data-file-geodatabase])
 - [Vector data: geojson](#vector-data-geojson)
+- [Vector data: Other](#vector-data-other)
 - [Raster data: GeoTIFF](#raster-data-geotiff)
 - [Raster data: ASCII](#raster-data-arcinfo-ascii)
 - [Writing rasters](#writing-rasters)
@@ -29,12 +29,14 @@ I am a bit of a stickler on workflow.  If you standardize that part of your anal
 - Our data will be stored in the project in a `data` folder
 - All of our analysis and examples will be scripted and live in a `scripts` folder
 - We will manage our paths with the fantastic [`here` package](https://cran.r-project.org/package=here).
-- This last one really isn't a part of the workflow, but it fit here.  The script I am working on will be updated and on the web.  Jeff will provide link.
+- This last one really isn't a part of the workflow, but it fit here.  The script I am working on will be updated and on the web at:
+    - AM: <https://github.com/jhollist/rspatial_workshop_am/blob/master/scripts/workshop_code.R>.
+    - PM: <https://github.com/jhollist/rspatial_workshop_pm/blob/master/scripts/workshop_code.R>
 
 ## Exercise 2.0
 We will work through this together.
 
-1. Create a new RStudio project and name it `rspatial_workshop_am` or `rspatial_workshop_pm`.
+1. Create a new RStudio project and name it `rspatial_workshop_am` or `rspatial_workshop_pm` depending on the time!
 2. In your project create a `data` folder.
 3. In your project create a `scripts` folder.
 4. Create a new script, save it to your `scripts` folder and call it `workshop_code.R`
@@ -48,9 +50,8 @@ library(raster)
 library(dplyr)
 ```
 
-
 ## Get the example data
-For this workshop, I have collected several example datasets to use and have included them in this repository.  So, let's first grab the dataset.  It is stored as a zip file.  You can download it [directly from this link](https://github.com/usepa/rspatial_workshop/blob/master/data/data.zip?raw=true), or we could use R.  I prefer to use the `httr` package because base `download.file` can act funny on different platforms.
+For this workshop, I have collected several example datasets to use and have included them in this repository.  So, let's first grab the dataset.  It is stored as a zip file.  You can download it [directly from this link](https://github.com/usepa/rspatial_workshop/blob/master/data/data.zip?raw=true), or we could use R.  I prefer to use the `httr` package because base `download.file` can act funny on different platforms.  We will save it to our `data` folder. 
 
 ```{r download_zip,eval=FALSE}
 library(httr)
@@ -66,34 +67,23 @@ unzip(here("data/data.zip"), exdir = here("data"), overwrite = TRUE)
 
 
 ## Vector data: shapefiles
-For many, shapefiles are going to be the most common way to interact with spatial data.  In R, there are many ways to read in shapefiles.  We are going to focus on using `rgdal` because it is flexible and provides a common interface to multiple file types.  But to be fair, I'll also quickly show a another option from `maptools`.
-
-### Reading in Shapfiles
-To read in a shapefile using `rgdal`, we want to use the `readOGR` function.  This function is the primary way to interact with vector data using `rgdal`.  There are many arguments to this function, but the two you need are the "dsn" and "layer".  For a shapefile the "dsn" is the path (in our case probably "data") and the "layer" is the name of the shapefile without any extension.  The function call to read the DC Metro shapefile from our example data looks like: 
+For many, shapefiles are going to be the most common way to interact with spatial data.  With `sf`, reading in in shapefiles is straightforward via the `st_read()` function
 
 ```{r read_shp}
-dc_metro <- readOGR("data","Metro_Lines")
+dc_metro <- st_read("data/Metro_Lines.shp")
 ```
 
-We will get more into working with `sp` object and visualizing spatial data later, but just to prove that this did something:
+We will get more into working with `sf` object and visualizing spatial data later, but just to prove that this did something:
 
 ```{r metro_chk}
 summary(dc_metro)
 plot(dc_metro)
 ```
 
-As I mentioned earlier, there are other ways to read in shapefiles.  For example:
-
-```{r maptools}
-dc_metro_mt<-maptools::readShapeLines("data/Metro_Lines")
-summary(dc_metro_mt)
-```
- 
-Couple of notes on this  First the `maptools` functions require that you know your geometry type, whereas, `readOGR` will get that from the data.  I did test to see if the the `maptools::readShapeLines` was any quicker than `rgdal::readOGR` and in my huge sample of one, it was. Lastly, `readShapeLines` is a one-trick pony.  It reads in shapefiles and that is it.  As we will see, `readOGR` works across a range of vector data types and thus, is what I would recommend for most vector data I/O tasks.
 
 ### Writing shapefiles
 
-Writing shapefiles is just as easy as reading them, assuming you have an `sp` object to work with.  We will just show this using `writeOGR`.
+Writing shapefiles is just as easy as reading them, assuming you have an `sf` object to work with.  We will just show this using `st_write`.
 
 Before we do this, we can prove that the shapefile doesn't exist.
 
@@ -107,42 +97,22 @@ list.files("data","dc_metro")
 Now to write the shapefile:
 
 ```{r write_shp}
-writeOGR(dc_metro,"data","dc_metro",driver="ESRI Shapefile")
+st_write(dc_metro,"data/dc_metro.shp")
 
 #Is it there?
 list.files("data","dc_metro")
 ```
 
-So same "dsn" and "layer" arguments as before.  Only difference is that the first argument is the `sp` object you want to write out to a shapefile.  
-
-## Vector data: file geodatabase
-A recent addition to the GDAL world is the ability to read ESRI File Geodatabases.  This is easy to access on windows as the latest version of GDAL is wrapped up as part of the `rgdal` install and thus you get access to the appropriate drivers.  This is a bit more challenging on Linux (even more so on the antiquated RHEL 6 that is EPAs approved OS) as you need to have GDAL 1.11.x +.  In any event, if you use file geodatabases, you can read those directly into R with readOGR. Difference here is the "dsn" is the name of the file geodatabase (with path info if needed), and the "layer" is the feature class.
-
-```{r read_fgdb}
-#List feature classes
-ogrListLayers("data/spx.gdb")
-examp_fgdb <- readOGR(dsn = "data/spx.gdb", layer="polygons5")
-```
-
-And to be sure it worked:
-
-```{r check_gdb}
-summary(examp_fgdb)
-plot(examp_fgdb)
-```
-
-Writing to a file geodatabase from R is not yet possible.
-
 ## Vector data: geojson
 
-Last vector example we will show is geojson.  For most desktop GIS users this will not be encountered too often, but as more and more GIS moves to the web, geojson will become increasingly common.  We will still rely on `readOGR` for the geojson.
+Last vector example we will show is geojson.  For most desktop GIS users this will not be encountered too often, but as more and more GIS moves to the web, geojson will become increasingly common.  We will still rely on `st_read()` for the geojson.
 
 ### Reading in geojson
 
 To read in with `rgdal` we use "dsn" and "layer" a bit differently.  The "dsn" is the name (and path) of the file, and "layer" is going to be set as "OGRGeoJSON". 
 
 ```{r read_geojson}
-dc_metro_sttn <- readOGR("data/metrostations.geojson", "OGRGeoJSON")
+dc_metro_sttn <- st_read("data/metrostations.geojson")
 ```
 
 And to see that something is there...
@@ -151,56 +121,39 @@ And to see that something is there...
 #Let's use the defualt print method 
 dc_metro_sttn
 ```
-```{r plot_geojson,eval=TRUE}
-#And add a few more things to our plot
-plot(dc_metro)
-plot(dc_metro_sttn, col = "red", add=TRUE)
-```
 
 ### Writing geojson
 
-Just as with shapefiles, writing to a geojson file can be accomplished with `writeOGR`.
+Just as with shapefiles, writing to a geojson file can be accomplished with `st_write()`.
 
 ```{r write_geojson,eval=F}
-writeOGR(dc_metro_sttn,dsn="stations.gejson",layer="dc_metro_sttn",driver="GeoJSON")
+st_write(dc_metro_sttn,"data/stations.geojson")
 ```
 
-Lastly, if you commonly work with geojson files, there is the `geojsonio` package from [rOpenSci](https://ropensci.org/) that provides a number of tools for reading, writing, and converting geojson files.  It is certainly worth exploring as it provides additional functionality beyond the `rgdal` toolset.
+## Vector data: Other
+
+We have barely touched the surface on the types of vector data formats that can be read in via `st_read()`.  The full list is available via <http://www.gdal.org/ogr_formats.html>.  With the defaults we can read File Geodatabase, PostGIS, GeoPackage, Arc Export files ...
+
+In short, if you have it, we can probably read it, but for todays short workshop that is a bit beyond the scope.
 
 ## Exercise 2.1
 For this first exercise we will just focus on getting a shapefile read into R.  We will be using the sticky notes I handed out to let me know who needs help and who has finished the exercise.  Once everyone is done, we will move on.
 
-1. Using `rgdal::readOGR` to read in the US Census Tiger Line Files of the state boundaries (tl_2015_us_state).  Assign it to an object called `us_states`.
+1. Using `st_read()`, read in the US Census Tiger Line Files of the state boundaries (tl_2015_us_state).  Assign it to an object called `us_states`.
 2. Once it is read in use `summary` to look at some of the basics and then plot the data. 
 
 ## Raster data: GeoTIFF
-We will just show a couple of examples as reading in rasters is a bit more straightforward than vector.  Our first examples will be GeoTIFF.
+We will now use the `raster` packages `raster()` function to read in some raster files.  Our first examples will be GeoTIFF.
 
-I will show one example with `rgdal`, but then we are going to switch to using `raster` for the remainder of the examples.  We'll see why pretty quickly with this example.
-
-The `rgdal` function for reading in rasters is `readGDAL`.  For rasters, it essentially has a single argument we need to worry about, "fname" which is the filename.
-
-```{r readGDAL}
-dc_elev_gdal <- readGDAL("data/dc_ned.tif")
-raster::print(dc_elev_gdal) #using the raster print method
-```
-
-Using `raster` is just as easy
+Using `raster()` is just as easy as `st_read()`
 
 ```{r raster}
 dc_elev <- raster("data/dc_ned.tif")
 dc_elev
+plot(dc_elev)
 ```
 
-So it wasn't too obvious, but if we look closer ...
-
-```{r time}
-system.time(readGDAL("data/dc_ned.tif"))
-system.time(raster("data/dc_ned.tif"))
-```
-
-The speed here is due to the fact that `raster` actually leaves the data on disk as opposed to pulling it all into memory.  Some operations will actually be faster on the `SpatialGrid` objects, but with bigger rasters reading in can be a challenge.  In addition, a lot of the typical raster operations come from the `raster` package and, in my opinion, it is just a bit easier to work with `raster` objects as opposed to `sp` for this.  Lastly, it is what I prefer, so there's that.  We will stick with `raster` for the rest of the workshop.
-
+One thing to note is that, by default, `raster` actually leaves the data on disk as opposed to pulling it all into memory (like most things do in R). This allows us to work with rasters that are significantly larger than are available memory.  Only downside is that if we want to use other R functions on really big rasters we might have some issues.  Anyway, `raster` is best available (and is pretty good) method for working with rasters in R.  That is changing as other options are in development, most notably [the `stars` package](https://github.com/r-spatial/stars).
 
 ## Writing rasters:
 Writing out to a raster file is done with `writeRaster`.  It has three arguments, "x" which is the `raster` object, "filename" which is the output file, and "format" which is the output raster format.  In practice, you can usually get away with not specifying the format as `raster` will try to infer the file format from the file name.  If you want to see the possible formats you can use `writeFormats()`.
@@ -223,6 +176,7 @@ There are a few packages on CRAN that provide access to spatial data. While this
 
 A couple of interesting examples.
 
-- `maps`: This has been around for a while and is still actively maintained so it's a good first place to look for spatial data. Contains mostly boundary datasets (e.g. counties) and has both US and international data. 
-- `USCensus2010`:  Provides access to census data directly in R.  I haven't dug into this one much, so can't say too much.  There is also a package for the 2000 census. 
+- [`censusapi`](https://cran.r-project.org/package=censusapi): This package provides a wrapper the API provided by the US Census Bureau.  Anything that is made available from that (e.g. decennial, ACS, etc.) can be accessed from this package.
+- [`tidycensus`](https://cran.r-project.org/package=tidycensus): Provides a user-friendly interface and data format for accessing Census data.
+- [`elevatr`](https://cran.r-project.org/package=elevatr): (WARNING: Horn Tooting Ahead) This package wraps several elevation API's that return either point elevation data as and `sp` object (`sf` support to come soon-ish) or a `raster` DEM for a given area, usually specified by the bounding box of an input `sp` object (ditto `sf` support).
 
