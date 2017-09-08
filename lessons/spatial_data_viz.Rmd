@@ -1,20 +1,21 @@
 ```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
 options(repos="http://cran.rstudio.com/")
-pkgs <- c("sp","rgdal","rgeos","raster","knitr","quickmapr","leaflet")
+pkgs <- c("sp","rgdal","rgeos","raster","knitr","quickmapr","leaflet","mapview", "dplyr")
 x<-lapply(pkgs, library, character.only = TRUE)
 opts_chunk$set(tidy=T)
 ```
 
 ```{r data_setup, echo=FALSE,cache=TRUE,message=FALSE}
-dc_metro <- readOGR("data","Metro_Lines",verbose=FALSE)
-dc_metro_sttn <- readOGR("data/metrostations.geojson", "OGRGeoJSON",verbose = FALSE)
-dc_elev <- raster("data/dc_ned.tif")
-dc_metro_prj <- spTransform(dc_metro,
-                CRS("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"))
-dc_metro_sttn_prj <- spTransform(dc_metro_sttn,
-                                 CRS(proj4string(dc_metro_prj)))
-dc_elev_prj <- projectRaster(dc_elev,crs=proj4string(dc_metro_sttn_prj)) 
-sttn_buff_500 <- gBuffer(dc_metro_sttn_prj,width=500)
+dc_metro <- st_read(here("data/Metro_Lines.shp"), stringsAsFactors = FALSE)
+dc_metro_sttn <- st_read(here("data/metrostations.geojson"), stringsAsFactors = FALSE)
+dc_elev <- raster(here("data/dc_ned.tif"))
+esri_alb_p4 <- proj4string(dc_nlcd)
+dc_metro_alb <- st_transform(dc_metro,esri_alb_p4)
+dc_metro_sttn_alb <- st_transform(dc_metro_sttn,
+                                  st_crs(dc_metro_alb)$proj4string)
+dc_elev_alb <- projectRaster(dc_elev,crs=st_crs(dc_metro_alb)$proj4string) 
+sttn_buff_500 <- st_buffer(dc_metro_sttn_alb, dist = 500) %>%
+  st_union()
 ```
 
 # Visualizing Spatial Data in R
@@ -26,16 +27,14 @@ Visualizing spatial data in interactive and static forms is one of the defining 
 Now we won't get to this level in just an hour or so, but we will see how to build static maps, get access to simple interactivity, and then see some of the javascript based mapping packages.
 
 ## Lesson Outline
-- [Visualizing spatial data with `sp` and `raster`](#visualizing-spatial-data-with-sp-and-raster)
-- [Simple interactivity with `quickmapr`](#simple-interactivity-with-quickmapr)
-- [Mapping with javascript: `leaflet`](#mapping-with-javascript-leaflet)
-- [Other visualization options](#other-visualization-options)
+- [Visualizing spatial data with `sf` and `raster`](#visualizing-spatial-data-with-sf-and-raster)
+- [Mapping with javascript: `mapview`](#mapping-with-javascript-mapview)
 
 ## Lesson Exercises
 - [Exercise 4.1](#exercise-41)
 - [Exercise 4.2](#exercise-42)
 
-## Visualizing spatial data with `sp` and `raster`
+## Visualizing spatial data with `sf` and `raster`
 The default plotting tools from `sp` and `raster` are good enough for most of your needs and there have been many additional tools added that allow these to be acceptable for making static maps (e.g. [GISTools](https://cran.r-project.org/web/packages/GISTools/)).  We have already seen these functions in action.  We will show these again.
 
 To create a plot of a single layer
@@ -66,58 +65,8 @@ plot(dc_metro_sttn, add=T, col="red", pch=15,cex=1.2)
 
 We can certainly get fancier with the final plot, but that means digging into the details of plotting with base R.  That'd be a workshop in and of itself!
 
-## Simple interactivity with `quickmapr`
-At the risk of being self-serving and tooting my own horn, the next package we are going to play with is [`quickmapr`](https://cran.r-project.org/web/packages/quickmapr/index.html).  
+## Mapping with javascript: `mavpiew`
 
-While building plots with the default plotting functions is fairly painless, I wanted something that was a bit more straightforward.  Additionally, the default plots are static and don't have any interactivity built into them and the interactive javascript solutions (coming up) expect unprojected data in latitude and longitude.  This is the other problem I wanted to address.  `quickmapr` is not meant as a replacement for default plotting nor is it meant to be used to create production quality maps.  It is for use during the course of an analysis.
-
-And before we move on, keep in mind that this is currently version 0.1.1, so it has bugs, but it works well enough that I am willing to go out on a limb and have a large number of people try to break it!
-
-First thing you will need to do is install it from CRAN and load into your library
-
-```{r, eval=FALSE}
-install.packages("quickmapr")
-library(quickmapr)
-```
-
-This package is built around the `qmap` object.  All of the information for creating the plots are stored in this object and it is what allows for the interactivity.
-
-To build this we use the function `qmap`. There are several options available, but all you need to create a plot with multiple layers is the layers to include in the plot.
-
-```{r}
-my_map <- qmap(dc_elev_prj,dc_metro_prj,dc_metro_sttn_prj)
-```
-
-So, not any different than the default plots (because it uses those!).  But now, we can do some other fun stuff.
-
-We zoom with `zi`, `zo`, and `ze`. We can pan with `p`. We can identify with `i`, and we can get back to our original extent with `f`.
-
-```{r,eval=FALSE}
-zi(my_map)
-p(my_map)
-zo(my_map)
-i(my_map,3)
-f(my_map)
-```
-
-There are a few other tricks built in, but they are experimental.  For example, adding a base images from the National Map (only aerial and topo currently supported).
-
-```{r}
-my_map<-qmap(dc_metro_prj, dc_metro_sttn_prj, colors=c("yellow","green"), 
-             basemap="topo",resolution = 800)
-my_map<-qmap(dc_metro_prj, dc_metro_sttn_prj, colors=c("yellow","green"), 
-             basemap="1m_aerial",resolution = 800)
-```
-
-Lastly, while this can handle large datasets, it is still slow.  This is because the default plotting functions slow down as your number of features get into the 10s of thousands.  It works, but isn't nearly as zippy and smooth as a stand-alone GIS.  In short, this provided handy tools for me and allowed me to stick with a single analysis environment.   
-
-## Exercise 4.1
-We will create a map of the data we've been working with, the NLCD and DC boundary.
-
-1. Map your clipped landcover and the DC boundary using the default plotting tools from `sp` and `raster`.
-2. Create the same map, but use `quickmapr`.  Try out some of the interactivity tools: zoom, pan, identify.
-
-## Mapping with javascript: `leaflet`
 Many of the visualization tasks (e.g. zoom, pan, identify) are implemented (and implemented well) in various javascript libraries.  As such, much of the development in R has been towards packages to access javascript libraries and allow the display of R objects. Our efforts are going to focus on the `leaflet` package which, unsurprisingly, allows us to access the leaflet javascript library.  The `leaflet` package is written and maintained through RStudio.  For more on how to use `leaflet`, check out [RStudio's tutorial](https://rstudio.github.io/leaflet/).
 
 Before we build some maps, let's get everything we need installed and loaded.
@@ -177,15 +126,11 @@ map
 ```
 
 ## Exercise 4.2
-For this exercise, we will create a leaflet map
+For this exercise, we will create a `mapview` map
 
 1. Create a leaflet map and add in the DC boundary.  Look at the `addPolygons` help to get you started.
 2. Add in the NLCD you clipped out as part of lesson 3.
 
-## Other visualization options
-What we have had the time to show in this workshop is just the beginning, as there are many packages that provide support for mapping spatial data.  The following are just a few of these.
+## Static maps with `ggplot2`
 
-- [mapview](https://cran.r-project.org/web/packages/mapview/index.html): This is a wrapper to leaflet that also greatly simplifies the creation of the maps by taking care of many of the settings behind the scenes (including, I believe, reprojecting data to work with leaflet).  
 - [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html): THE data viz package for R.  Also can be used to make maps (it is what I use for my static maps). Requires additional processing of the spatial data to create plots, but has almost unlimited possibilities for creating maps.
-- [ggmap](https://cran.r-project.org/web/packages/ggmap/index.html): A `ggplot2` based package for creating maps.  Makes it a bit easier and has built in support for some basemaps (e.g. Google Maps).
-- [cartographer](https://github.com/ropensci/cartographer): Not on CRAN and hasn't been actively developed in a while, but is interesting because it provides access to a different javascript library, d3 and d3-carto-maps. Similar in functionality to the leaflet solution, but d3 has support for projections built in so has possibility for better handling of projected data.  
