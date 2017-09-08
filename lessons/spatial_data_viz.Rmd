@@ -1,6 +1,11 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 ```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
 options(repos="http://cran.rstudio.com/")
-pkgs <- c("sp","rgdal","rgeos","raster","knitr","quickmapr","leaflet","mapview", "dplyr")
+pkgs <- c("sp","rgdal","rgeos","raster","knitr","quickmapr","leaflet","mapview", "dplyr","sf","here")
 x<-lapply(pkgs, library, character.only = TRUE)
 opts_chunk$set(tidy=T)
 ```
@@ -9,6 +14,7 @@ opts_chunk$set(tidy=T)
 dc_metro <- st_read(here("data/Metro_Lines.shp"), stringsAsFactors = FALSE)
 dc_metro_sttn <- st_read(here("data/metrostations.geojson"), stringsAsFactors = FALSE)
 dc_elev <- raster(here("data/dc_ned.tif"))
+dc_nlcd <- raster(here("data/dc_nlcd.tif"))
 esri_alb_p4 <- proj4string(dc_nlcd)
 dc_metro_alb <- st_transform(dc_metro,esri_alb_p4)
 dc_metro_sttn_alb <- st_transform(dc_metro_sttn,
@@ -19,15 +25,18 @@ sttn_buff_500 <- st_buffer(dc_metro_sttn_alb, dist = 500) %>%
 ```
 
 # Visualizing Spatial Data in R
-Visualizing spatial data in interactive and static forms is one of the defining characteristics of GIS.  With interactive visualization and analysis, R, admittedly, is not quite up to the standards of a stand-alone GIS like QGIS or ArcGIS.  That being said, it has come quite a long way in the last several years.  Static visualization (e.g. maps) in R are, in my opinion, on par with anything you can create with a dedicated GIS.  A few (now somewhat dated) examples of maps built with R show this:
+Visualizing spatial data in interactive and static forms is one of the defining characteristics of GIS.  With interactive visualization and analysis, R, has not been quite up to the standards of a stand-alone GIS like QGIS or ArcGIS. Static visualization (e.g. maps) in R are, in my opinion, on par with anything you can create with a dedicated GIS.  A few (now somewhat dated) examples of maps built with R show this:
 
 - [London Bike Hires](http://spatialanalysis.co.uk/wp-content/uploads/2012/02/bike_ggplot.png)
 - [Facebook Users](http://paulbutler.org/archives/visualizing-facebook-friends/facebook_map.png)
 
-Now we won't get to this level in just an hour or so, but we will see how to build static maps, get access to simple interactivity, and then see some of the javascript based mapping packages.
+For quick simple static visualization we can use the base plotting functions that `sf` and `raster` provide.  For maps with a bit more cartographic flair we can use `ggplot2`.  We will show examples of both of these.  
+
+For interactive visualization of spatial data, the bread and butter of GIS, we will use the `mapview` package which provides an easy way to visualize `sf` (and `sp`) objects using Leaflet javascript libraries.
 
 ## Lesson Outline
 - [Visualizing spatial data with `sf` and `raster`](#visualizing-spatial-data-with-sf-and-raster)
+- [Visualizing spatial data with `ggplot2`](#visualizing-spatial-data-with-ggplot2)
 - [Mapping with javascript: `mapview`](#mapping-with-javascript-mapview)
 
 ## Lesson Exercises
@@ -35,16 +44,17 @@ Now we won't get to this level in just an hour or so, but we will see how to bui
 - [Exercise 4.2](#exercise-42)
 
 ## Visualizing spatial data with `sf` and `raster`
-The default plotting tools from `sp` and `raster` are good enough for most of your needs and there have been many additional tools added that allow these to be acceptable for making static maps (e.g. [GISTools](https://cran.r-project.org/web/packages/GISTools/)).  We have already seen these functions in action.  We will show these again.
+
+The default plotting tools from `sf` and `raster` are good enough for most of your needs and we have already seen these functions in action.  We will show these again.
 
 To create a plot of a single layer
 
 ```{r}
-plot(dc_metro)
+plot(st_geometry(dc_metro))
 #Play with symbology
-plot(dc_metro, col="red", lwd = 3)
+plot(st_geometry(dc_metro), col="red", lwd = 3)
 #Use data to color
-plot(dc_metro, col=dc_metro$NAME, lwd=dc_metro$GIS_ID)
+plot(st_geometry(dc_metro), col=dc_metro$NAME, lwd=dc_metro$GIS_ID)
 ```
 
 To create a plot of a multiple layers, we can use the "add" argument.
@@ -64,6 +74,8 @@ plot(dc_metro_sttn, add=T, col="red", pch=15,cex=1.2)
 ```
 
 We can certainly get fancier with the final plot, but that means digging into the details of plotting with base R.  That'd be a workshop in and of itself!
+
+## Visualizing spatial data with `ggplot2`
 
 ## Mapping with javascript: `mavpiew`
 
