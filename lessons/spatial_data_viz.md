@@ -1,13 +1,9 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
+
 
 
 
 ```
-## Reading layer `Metro_Lines' from data source `C:\data\rspatial_workshop\data\Metro_Lines.shp' using driver `ESRI Shapefile'
+## Reading layer `Metro_Lines' from data source `/var/host/media/removable/SD Card/rspatial_workshop/data/Metro_Lines.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 8 features and 4 fields
 ## geometry type:  MULTILINESTRING
 ## dimension:      XY
@@ -17,7 +13,7 @@ editor_options:
 ```
 
 ```
-## Reading layer `Metro_Stations_District' from data source `C:\data\rspatial_workshop\data\metrostations.geojson' using driver `GeoJSON'
+## Reading layer `OGRGeoJSON' from data source `/var/host/media/removable/SD Card/rspatial_workshop/data/metrostations.geojson' using driver `GeoJSON'
 ## Simple feature collection with 40 features and 6 fields
 ## geometry type:  POINT
 ## dimension:      XY
@@ -66,7 +62,7 @@ plot(st_geometry(dc_metro), col="red", lwd = 3)
 
 ```r
 #Use data to color
-plot(st_geometry(dc_metro), col=dc_metro$NAME, lwd=dc_metro$GIS_ID)
+plot(st_geometry(dc_metro), col=factor(dc_metro$NAME), lwd=dc_metro$GIS_ID)
 ```
 
 ```
@@ -81,10 +77,30 @@ plot(st_geometry(dc_metro), col=dc_metro$NAME, lwd=dc_metro$GIS_ID)
 
 ## Warning in plot.xy(xy.coords(x, y), type = type, ...): NAs introduced by
 ## coercion
-```
 
-```
-## Error in plot.xy(xy.coords(x, y), type = type, ...): invalid color name 'yellow - rush +'
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): NAs introduced by
+## coercion
+
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): NAs introduced by
+## coercion
+
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): NAs introduced by
+## coercion
+
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): NAs introduced by
+## coercion
+
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): NAs introduced by
+## coercion
+
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): NAs introduced by
+## coercion
+
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): NAs introduced by
+## coercion
+
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): NAs introduced by
+## coercion
 ```
 
 ![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-3.png)
@@ -114,7 +130,7 @@ plot(st_geometry(dc_metro_sttn), add=T, col="red", pch=15,cex=1.2)
 We can certainly get fancier with the final plot, but that means digging into the details of plotting with base R.  Also, we can plot maps with `ggplot2`, but that'd be a workshop in and of itself!  
 
 
-## Mapping with javascript: `mavpiew`
+## Mapping with javascript: `mapview`
 
 Many of the visualization tasks (e.g. zoom, pan, identify) are implemented (and implemented well) in various javascript libraries.  As such, much of the development in R has been towards packages to access javascript libraries and allow the display of R objects. Our efforts are going to focus on the [`mpaview` package](https://cran.r-project.org/package=mapview) which provides a relatively streamlined way to access the [leaflet javascript library](http://leafletjs.com/) in R.  It uses the `leaflet` package, which  is written and maintained through RStudio.  For more on how to use `leaflet` directly, check out [RStudio's tutorial](https://rstudio.github.io/leaflet/).  For additional tutorials on mapview, see articles on [the r-spatial page.](https://r-spatial.github.io/mapview/index.html) 
 

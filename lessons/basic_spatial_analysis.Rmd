@@ -36,12 +36,12 @@ dc_elev <- raster(here("data/dc_ned.tif"))
 
 We've already seen how to use the default print statements to look at the basics
 
-```{r}
+```{r, eval = FALSE}
 dc_metro
 dc_metro_sttn
 ```
 
-We can get more info on the data with are usually data frame tools:
+We can get more info on the data with are usuall data frame tools:
 
 ```{r}
 head(dc_metro_sttn)
@@ -65,7 +65,7 @@ ri
 This is cool, but even better is our ability to use `dplyr` for this type of work.
 
  
-```{r}
+```{r, warning=FALSE, message=FALSE}
 # Need to add dplyr
 library(dplyr)
 
@@ -251,15 +251,6 @@ So, with this limited to just the extent of our dataset we can now clip out the 
 dc_elev_sttns <- mask(dc_elev_crop,as(sttn_buff_500, "Spatial"))
 plot(dc_elev_sttns)
 plot(sttn_buff_500,add=T,border="red",lwd=2)
-```
-
-```{r}
-x %>% 
-  slice(1:3) %>%
-  group_by(NAME) %>%
-  summarize(sttn_median_elev = median(values(mask(crop(dc_elev_alb,
-                                                       as(.$geometry, "Spatial")), 
-                                                  as(.$geometry, "Spatial"))),na.rm=TRUE))
 ```
 
 That gives us just the elevation within 500 meters of the Metro stations.  Probably not really interesting information, but we have it!  It might be more interesting to get the average elevation of each metro station.  Our workflow would be different as we would need to look at this on a per-station basis.  Might require a loop or a different approach all together.  Certainly possible, but beyond what we have time for today.

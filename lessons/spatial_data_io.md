@@ -73,7 +73,7 @@ dc_metro <- st_read(here("data/Metro_Lines.shp"))
 ```
 
 ```
-## Reading layer `Metro_Lines' from data source `C:\data\rspatial_workshop\data\Metro_Lines.shp' using driver `ESRI Shapefile'
+## Reading layer `Metro_Lines' from data source `/var/host/media/removable/SD Card/rspatial_workshop/data/Metro_Lines.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 8 features and 4 fields
 ## geometry type:  MULTILINESTRING
 ## dimension:      XY
@@ -148,7 +148,7 @@ st_write(dc_metro,here("data/dc_metro.shp"))
 ```
 
 ```
-## Writing layer `dc_metro' to data source `C:/data/rspatial_workshop/data/dc_metro.shp' using driver `ESRI Shapefile'
+## Writing layer `dc_metro' to data source `/var/host/media/removable/SD Card/rspatial_workshop/data/dc_metro.shp' using driver `ESRI Shapefile'
 ## features:       8
 ## fields:         4
 ## geometry type:  Multi Line String
@@ -177,7 +177,7 @@ dc_metro_sttn <- st_read(here("data/metrostations.geojson"))
 ```
 
 ```
-## Reading layer `Metro_Stations_District' from data source `C:\data\rspatial_workshop\data\metrostations.geojson' using driver `GeoJSON'
+## Reading layer `OGRGeoJSON' from data source `/var/host/media/removable/SD Card/rspatial_workshop/data/metrostations.geojson' using driver `GeoJSON'
 ## Simple feature collection with 40 features and 6 fields
 ## geometry type:  POINT
 ## dimension:      XY
@@ -190,181 +190,45 @@ And to see that something is there...
  
 
 ```r
-#Let's use the defualt print method 
-dc_metro_sttn
+#Let's look at the first six lines
+head(dc_metro_sttn)
 ```
 
 ```
-## Simple feature collection with 40 features and 6 fields
+## Simple feature collection with 6 features and 6 fields
 ## geometry type:  POINT
 ## dimension:      XY
-## bbox:           xmin: -77.085 ymin: 38.84567 xmax: -76.93526 ymax: 38.97609
+## bbox:           xmin: -77.03255 ymin: 38.89098 xmax: -76.93837 ymax: 38.97609
 ## epsg (SRID):    4326
 ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-##    OBJECTID   GIS_ID                                         NAME
-## 1         1 mstn_007                             Columbia Heights
-## 2         2 mstn_020                         Georgia Ave Petworth
-## 3         3 mstn_034                                       Takoma
-## 4         4 mstn_004                                Brookland-CUA
-## 5         5 mstn_017                                  Fort Totten
-## 6         6 mstn_003                                 Benning Road
-## 7         7 mstn_009                                     Deanwood
-## 8         8 mstn_028                           NoMa - Gallaudet U
-## 9         9 mstn_035                                Tenleytown-AU
-## 10       10 mstn_018                           Friendship Heights
-## 11       11 mstn_016                             Foggy Bottom-GWU
-## 12       12 mstn_013                                Farragut West
-## 13       13 mstn_012                               Farragut North
-## 14       14 mstn_010                                Dupont Circle
-## 15       15 mstn_040                Woodley Park-Zoo Adams Morgan
-## 16       16 mstn_022                                LEnfant Plaza
-## 17       17 mstn_032                                  Smithsonian
-## 18       18 mstn_015                             Federal Triangle
-## 19       19 mstn_002                           Archives-Navy Meml
-## 20       20 mstn_039                                   Waterfront
-## 21       21 mstn_027                         Navy Yard - Ballpark
-## 22       22 mstn_014                            Federal Center SW
-## 23       23 mstn_021                                 Judiciary Sq
-## 24       24 mstn_005                                Capitol South
-## 25       25 mstn_023                                 McPherson Sq
-## 26       26 mstn_024                                 Metro Center
-## 27       27 mstn_019                         Gallery Pl-Chinatown
-## 28       28 mstn_026      Mt Vernon Sq - 7th St Convention Center
-## 29       29 mstn_036 U St/African-Amer Civil War Memorial/Cardozo
-## 30       30 mstn_031                             Shaw-Howard Univ
-## 31       31 mstn_037                                Union Station
-## 32       32 mstn_008                             Congress Heights
-## 33       33 mstn_001                                    Anacostia
-## 34       34 mstn_011                               Eastern Market
-## 35       35 mstn_029                                  Potomac Ave
-## 36       36 mstn_033                               Stadium Armory
-## 37       37 mstn_030                             Rhode Island Ave
-## 38       38 mstn_025                                Minnesota Ave
-## 39       39 mstn_038                                 Van Ness-UDC
-## 40       40 mstn_006                               Cleveland Park
-##                                                    WEB_URL
-## 1   http://wmata.com/rail/station_detail.cfm?station_id=75
-## 2   http://wmata.com/rail/station_detail.cfm?station_id=76
-## 3   http://wmata.com/rail/station_detail.cfm?station_id=29
-## 4   http://wmata.com/rail/station_detail.cfm?station_id=27
-## 5   http://wmata.com/rail/station_detail.cfm?station_id=28
-## 6   http://wmata.com/rail/station_detail.cfm?station_id=90
-## 7   http://wmata.com/rail/station_detail.cfm?station_id=65
-## 8  http://wmata.com/rail/station_detail.cfm?station_id=108
-## 9   http://wmata.com/rail/station_detail.cfm?station_id=10
-## 10  http://wmata.com/rail/station_detail.cfm?station_id=11
-## 11  http://wmata.com/rail/station_detail.cfm?station_id=40
-## 12  http://wmata.com/rail/station_detail.cfm?station_id=38
-## 13   http://wmata.com/rail/station_detail.cfm?station_id=4
-## 14   http://wmata.com/rail/station_detail.cfm?station_id=6
-## 15   http://wmata.com/rail/station_detail.cfm?station_id=7
-## 16  http://wmata.com/rail/station_detail.cfm?station_id=82
-## 17  http://wmata.com/rail/station_detail.cfm?station_id=54
-## 18  http://wmata.com/rail/station_detail.cfm?station_id=53
-## 19  http://wmata.com/rail/station_detail.cfm?station_id=81
-## 20  http://wmata.com/rail/station_detail.cfm?station_id=83
-## 21  http://wmata.com/rail/station_detail.cfm?station_id=84
-## 22  http://wmata.com/rail/station_detail.cfm?station_id=58
-## 23  http://wmata.com/rail/station_detail.cfm?station_id=23
-## 24  http://wmata.com/rail/station_detail.cfm?station_id=59
-## 25  http://wmata.com/rail/station_detail.cfm?station_id=36
-## 26   http://wmata.com/rail/station_detail.cfm?station_id=1
-## 27  http://wmata.com/rail/station_detail.cfm?station_id=21
-## 28  http://wmata.com/rail/station_detail.cfm?station_id=70
-## 29  http://wmata.com/rail/station_detail.cfm?station_id=73
-## 30  http://wmata.com/rail/station_detail.cfm?station_id=72
-## 31  http://wmata.com/rail/station_detail.cfm?station_id=25
-## 32  http://wmata.com/rail/station_detail.cfm?station_id=86
-## 33  http://wmata.com/rail/station_detail.cfm?station_id=85
-## 34  http://wmata.com/rail/station_detail.cfm?station_id=60
-## 35  http://wmata.com/rail/station_detail.cfm?station_id=61
-## 36  http://wmata.com/rail/station_detail.cfm?station_id=63
-## 37  http://wmata.com/rail/station_detail.cfm?station_id=26
-## 38  http://wmata.com/rail/station_detail.cfm?station_id=64
-## 39   http://wmata.com/rail/station_detail.cfm?station_id=9
-## 40   http://wmata.com/rail/station_detail.cfm?station_id=8
-##                             LINE                     ADDRESS
-## 1                  green, yellow         3030 14TH STREET NW
-## 2                  green, yellow      3700 GEORGIA AVENUE NW
-## 3                            red         327 CEDAR STREET NW
-## 4                            red      801 MICHIGAN AVENUE NE
-## 5             red, green, yellow      550 GALLOWAY STREET NE
-## 6           blue, orange, silver        4500 BENNING ROAD NE
-## 7                         orange    4720 MINNESOTA AVENUE NE
-## 8                            red       200 FLORIDA AVENUE NE
-## 9                            red    4501 WISCONSIN AVENUE NW
-## 10                           red    5337 WISCONSIN AVENUE NW
-## 11          blue, orange, silver            2301 I STREET NW
-## 12          blue, orange, silver          900 18TH STREET NW
-## 13                           red  1001 CONNECTICUT AVENUE NW
-## 14                           red         1525 20TH STREET NW
-## 15                           red         2700 24TH STREET NW
-## 16 grn, yllw, orange, blue, slvr      600 MARYLAND AVENUE SW
-## 17          blue, orange, silver 1200 INDEPENDENCE AVENUE SW
-## 18          blue, orange, silver          302 12TH STREET NW
-## 19                 green, yellow  701 PENNSYLVANIA AVENUE NW
-## 20                         green             399 M STREET SW
-## 21                         green             200 M STREET SE
-## 22          orange, blue, silver           401 3RD STREET SW
-## 23                           red             450 F STREET NW
-## 24          blue, orange, silver           355 1ST STREET SE
-## 25          blue, orange, silver            1400 I STREET NW
-## 26     red, blue, orange, silver          607 13TH STREET NW
-## 27            red, green, yellow             630 H STREET NW
-## 28                 green, yellow             700 M STREET NW
-## 29                 green, yellow            1300 U STREET NW
-## 30                 green, yellow          1701 8TH STREET NW
-## 31                           red           701 1ST STREET NE
-## 32                         green      1290 ALABAMA AVENUE SE
-## 33                         green         1101 HOWARD ROAD SE
-## 34          blue, orange, silver  701 PENNSYLVANIA AVENUE SE
-## 35          blue, orange, silver          700 14TH STREET SE
-## 36          blue, orange, silver          192 19TH STREET SE
-## 37                           red  919 RHODE ISLAND AVENUE NE
-## 38                        orange     400 MINNESOTA AVENUE NE
-## 39                           red  4200 CONNECTICUT AVENUE NW
-## 40                           red  3599 CONNECTICUT AVENUE NW
-##                          geometry
-## 1  POINT (-77.0325544130882 38...
-## 2  POINT (-77.0234631972137 38...
-## 3  POINT (-77.0181789925646 38...
-## 4  POINT (-76.9945365689642 38...
-## 5  POINT (-77.002205364201 38....
-## 6  POINT (-76.9383671319143 38...
-## 7  POINT (-76.9352590469192 38...
-## 8  POINT (-77.0030227321829 38...
-## 9  POINT (-77.0795896368441 38...
-## 10 POINT (-77.084998118688 38....
-## 11 POINT (-77.0502800382973 38...
-## 12 POINT (-77.0406977114452 38...
-## 13 POINT (-77.0397031233431 38...
-## 14 POINT (-77.0434166573705 38...
-## 15 POINT (-77.0524203221932 38...
-## 16 POINT (-77.0219107735302 38...
-## 17 POINT (-77.0280685258322 38...
-## 18 POINT (-77.0281342902871 38...
-## 19 POINT (-77.0219166779746 38...
-## 20 POINT (-77.0175074963564 38...
-## 21 POINT (-77.0050879350566 38...
-## 22 POINT (-77.0158705045136 38...
-## 23 POINT (-77.0166412451066 38...
-## 24 POINT (-77.0051417041544 38...
-## 25 POINT (-77.033636466218 38....
-## 26 POINT (-77.0280802893592 38...
-## 27 POINT (-77.0219176806835 38...
-## 28 POINT (-77.0219166711418 38...
-## 29 POINT (-77.027498186088 38....
-## 30 POINT (-77.0219139919702 38...
-## 31 POINT (-77.0074165779102 38...
-## 32 POINT (-76.9885142092577 38...
-## 33 POINT (-76.9953730185932 38...
-## 34 POINT (-76.996003408071 38....
-## 35 POINT (-76.9854975975333 38...
-## 36 POINT (-76.9770911770343 38...
-## 37 POINT (-76.9959392002222 38...
-## 38 POINT (-76.946750000542 38....
-## 39 POINT (-77.0629884863183 38...
-## 40 POINT (-77.0580448228721 38...
+##   OBJECTID   GIS_ID                 NAME
+## 1        1 mstn_007     Columbia Heights
+## 2        2 mstn_020 Georgia Ave Petworth
+## 3        3 mstn_034               Takoma
+## 4        4 mstn_004        Brookland-CUA
+## 5        5 mstn_017          Fort Totten
+## 6        6 mstn_003         Benning Road
+##                                                  WEB_URL
+## 1 http://wmata.com/rail/station_detail.cfm?station_id=75
+## 2 http://wmata.com/rail/station_detail.cfm?station_id=76
+## 3 http://wmata.com/rail/station_detail.cfm?station_id=29
+## 4 http://wmata.com/rail/station_detail.cfm?station_id=27
+## 5 http://wmata.com/rail/station_detail.cfm?station_id=28
+## 6 http://wmata.com/rail/station_detail.cfm?station_id=90
+##                   LINE                ADDRESS
+## 1        green, yellow    3030 14TH STREET NW
+## 2        green, yellow 3700 GEORGIA AVENUE NW
+## 3                  red    327 CEDAR STREET NW
+## 4                  red 801 MICHIGAN AVENUE NE
+## 5   red, green, yellow 550 GALLOWAY STREET NE
+## 6 blue, orange, silver   4500 BENNING ROAD NE
+##                         geometry
+## 1 POINT (-77.0325544130882 38...
+## 2 POINT (-77.0234631972137 38...
+## 3 POINT (-77.0181789925646 38...
+## 4 POINT (-76.9945365689642 38...
+## 5 POINT (-77.002205364201 38....
+## 6 POINT (-76.9383671319143 38...
 ```
 
 ### Writing geojson
@@ -405,7 +269,7 @@ dc_elev
 ## resolution  : 0.0002777778, 0.0002777778  (x, y)
 ## extent      : -77.15306, -76.89722, 38.77639, 38.99806  (xmin, xmax, ymin, ymax)
 ## coord. ref. : +proj=longlat +datum=NAD83 +no_defs +ellps=GRS80 +towgs84=0,0,0 
-## data source : C:\data\rspatial_workshop\data\dc_ned.tif 
+## data source : /var/host/media/removable/SD Card/rspatial_workshop/data/dc_ned.tif 
 ## names       : dc_ned 
 ## values      : -5.316066, 131.4813  (min, max)
 ```

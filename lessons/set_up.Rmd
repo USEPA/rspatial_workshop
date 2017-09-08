@@ -61,7 +61,7 @@ libaray("rgdal")
 Getting set up on Linux or Mac requires more effort (i.e. need to have GDAL installed).  As this is for a USEPA audience the windows installs will work for most.  Thus, discussion of this is mostly beyond the scope of this workshop.  
 
 ## Exercise 1.1
-The first exercise won't be too thrilling, but we need to make sure everyone has the four packages installed. 
+The first exercise won't be too thrilling, but we need to make sure everyone has the five packages installed. 
 
 1. Install `dplyr` first. We will use that for spatial data manipulation and the version of it you have determines what gets installed with `sf`.
 2. Install `sf` and load `sf` into your library.

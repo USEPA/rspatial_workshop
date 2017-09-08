@@ -119,8 +119,8 @@ dc_metro_sttn <- st_read(here("data/metrostations.geojson"))
 And to see that something is there...
  
 ```{r check_geojson}
-#Let's use the defualt print method 
-dc_metro_sttn
+#Let's look at the first six lines
+head(dc_metro_sttn)
 ```
 
 ### Writing geojson

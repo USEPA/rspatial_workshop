@@ -9,3 +9,10 @@ leaflet
 mapview
 here
 dplyr
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+bindrcpp

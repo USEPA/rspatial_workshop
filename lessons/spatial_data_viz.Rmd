@@ -1,8 +1,4 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
+
 ```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
 options(repos="http://cran.rstudio.com/")
 pkgs <- c("sp","rgdal","rgeos","raster","knitr","leaflet","mapview", "dplyr","sf","here")
@@ -10,7 +6,7 @@ x<-lapply(pkgs, library, character.only = TRUE)
 opts_chunk$set(tidy=FALSE)
 ```
 
-```{r data_setup, echo=FALSE,cache=TRUE,message=FALSE}
+```{r data_setup, echo=FALSE,cache=TRUE,message=FALSE,error=FALSE}
 dc_metro <- st_read(here("data/Metro_Lines.shp"), stringsAsFactors = FALSE)
 dc_metro_sttn <- st_read(here("data/metrostations.geojson"), stringsAsFactors = FALSE)
 dc_elev <- raster(here("data/dc_ned.tif"))
@@ -53,7 +49,7 @@ plot(st_geometry(dc_metro))
 #Play with symbology
 plot(st_geometry(dc_metro), col="red", lwd = 3)
 #Use data to color
-plot(st_geometry(dc_metro), col=dc_metro$NAME, lwd=dc_metro$GIS_ID)
+plot(st_geometry(dc_metro), col=factor(dc_metro$NAME), lwd=dc_metro$GIS_ID)
 ```
 
 To create a plot of a multiple layers, we can use the "add" argument.
@@ -75,7 +71,7 @@ plot(st_geometry(dc_metro_sttn), add=T, col="red", pch=15,cex=1.2)
 We can certainly get fancier with the final plot, but that means digging into the details of plotting with base R.  Also, we can plot maps with `ggplot2`, but that'd be a workshop in and of itself!  
 
 
-## Mapping with javascript: `mavpiew`
+## Mapping with javascript: `mapview`
 
 Many of the visualization tasks (e.g. zoom, pan, identify) are implemented (and implemented well) in various javascript libraries.  As such, much of the development in R has been towards packages to access javascript libraries and allow the display of R objects. Our efforts are going to focus on the [`mpaview` package](https://cran.r-project.org/package=mapview) which provides a relatively streamlined way to access the [leaflet javascript library](http://leafletjs.com/) in R.  It uses the `leaflet` package, which  is written and maintained through RStudio.  For more on how to use `leaflet` directly, check out [RStudio's tutorial](https://rstudio.github.io/leaflet/).  For additional tutorials on mapview, see articles on [the r-spatial page.](https://r-spatial.github.io/mapview/index.html) 
 
