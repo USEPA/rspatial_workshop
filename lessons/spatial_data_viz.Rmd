@@ -5,9 +5,9 @@ editor_options:
 ---
 ```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
 options(repos="http://cran.rstudio.com/")
-pkgs <- c("sp","rgdal","rgeos","raster","knitr","quickmapr","leaflet","mapview", "dplyr","sf","here")
+pkgs <- c("sp","rgdal","rgeos","raster","knitr","leaflet","mapview", "dplyr","sf","here")
 x<-lapply(pkgs, library, character.only = TRUE)
-opts_chunk$set(tidy=T)
+opts_chunk$set(tidy=FALSE)
 ```
 
 ```{r data_setup, echo=FALSE,cache=TRUE,message=FALSE}
@@ -36,7 +36,6 @@ For interactive visualization of spatial data, the bread and butter of GIS, we w
 
 ## Lesson Outline
 - [Visualizing spatial data with `sf` and `raster`](#visualizing-spatial-data-with-sf-and-raster)
-- [Visualizing spatial data with `ggplot2`](#visualizing-spatial-data-with-ggplot2)
 - [Mapping with javascript: `mapview`](#mapping-with-javascript-mapview)
 
 ## Lesson Exercises
@@ -60,89 +59,64 @@ plot(st_geometry(dc_metro), col=dc_metro$NAME, lwd=dc_metro$GIS_ID)
 To create a plot of a multiple layers, we can use the "add" argument.
 
 ```{r}
-plot(dc_metro)
+plot(st_geometry(dc_metro))
 #Add stations, change color,size, and symbol
-plot(dc_metro_sttn, add=T, col="red", pch=15, cex=1.2)
+plot(st_geometry(dc_metro_sttn), add=T, col="red", pch=15, cex=1.2)
 ```
 
 Add some raster data in.
 
 ```{r}
 plot(dc_elev)
-plot(dc_metro, add=T)
-plot(dc_metro_sttn, add=T, col="red", pch=15,cex=1.2)
+plot(st_geometry(dc_metro), add=T)
+plot(st_geometry(dc_metro_sttn), add=T, col="red", pch=15,cex=1.2)
 ```
 
-We can certainly get fancier with the final plot, but that means digging into the details of plotting with base R.  That'd be a workshop in and of itself!
+We can certainly get fancier with the final plot, but that means digging into the details of plotting with base R.  Also, we can plot maps with `ggplot2`, but that'd be a workshop in and of itself!  
 
-## Visualizing spatial data with `ggplot2`
 
 ## Mapping with javascript: `mavpiew`
 
-Many of the visualization tasks (e.g. zoom, pan, identify) are implemented (and implemented well) in various javascript libraries.  As such, much of the development in R has been towards packages to access javascript libraries and allow the display of R objects. Our efforts are going to focus on the `leaflet` package which, unsurprisingly, allows us to access the leaflet javascript library.  The `leaflet` package is written and maintained through RStudio.  For more on how to use `leaflet`, check out [RStudio's tutorial](https://rstudio.github.io/leaflet/).
+Many of the visualization tasks (e.g. zoom, pan, identify) are implemented (and implemented well) in various javascript libraries.  As such, much of the development in R has been towards packages to access javascript libraries and allow the display of R objects. Our efforts are going to focus on the [`mpaview` package](https://cran.r-project.org/package=mapview) which provides a relatively streamlined way to access the [leaflet javascript library](http://leafletjs.com/) in R.  It uses the `leaflet` package, which  is written and maintained through RStudio.  For more on how to use `leaflet` directly, check out [RStudio's tutorial](https://rstudio.github.io/leaflet/).  For additional tutorials on mapview, see articles on [the r-spatial page.](https://r-spatial.github.io/mapview/index.html) 
 
 Before we build some maps, let's get everything we need installed and loaded.
 
 ```{r eval=FALSE}
 install.packages("leaflet")
-library(leaflet)
+install.packages("mapview")
+library(mapview)
 ```
 
-Although the maps we can create with `leaflet` are really nice, there is one downside.  It is expected that the data are all in unprojected latitude and longitude, so if you have projected data, that will need to be converted back in to geographic coordinates.  For us, we have examples of data that are already in the correct projection.
+Although the maps we can create with `mapview` are really nice, there is one downside.  It is expected that the data are all in unprojected latitude and longitude, so if you have projected data, that will need to be converted back in to geographic coordinates. This happens behind the scenes by `mapview` so it is easy to do, just be aware that your maps will display in the ubiquitous web mercator projection. For most applications this won't be a problem, but if your viz requires accurate shape and size and you are in high lattitudes, you will need to think carefully about the impacts of this.
 
-One of the nice things about the `leaflet` interface is that it is really easy to work iteratively and build your maps by adding data and options to an existing leaflet map. So lets start with the bare minimum.
-
-```{r, eval=FALSE}
-map <- leaflet()
-map <- addTiles(map)
-map <- addPolylines(map,data=dc_metro)
-map
-```
-
-There are lots of tiles available to us.  The default is Open Street Map. We can try out some of the other available tiles. Full list of options available from <http://leaflet-extras.github.io/leaflet-providers/preview/>.
+So lets get started with the bare minimum of `mapview()` 
 
 ```{r, eval=FALSE}
-map <- leaflet()
-map <- addPolylines(map,data=dc_metro)
-map <- addProviderTiles(map,"Esri.NatGeoWorldMap")
-map
-#or
-map <- leaflet()
-map <- addPolylines(map,data=dc_metro)
-map <- addProviderTiles(map,"MapQuestOpen.Aerial")
+map <- mapview(dc_metro_alb)
 map
 ```
 
-And we can add other layers in and also change their styling.
+The default options from `mapview()` are pretty nice and we won't be going beyond these.  But since this is built off of `leaflet`, in theory most things that leaflet can do, we can use in our mapview maps.  Let's explore the map a bit before we move on.
+
+Now, lets add other layers in and also change their styling.
 
 ```{r, eval=FALSE}
-map <- leaflet()
-map <- addTiles(map)
-map <- addPolylines(map,data=dc_metro)
-map <- addCircles(map, data=dc_metro_sttn,
-                  color="red", weight = 7,
-                  popup = dc_metro_sttn$NAME)
-
-map
+map + dc_metro_sttn
 ```
 
 Lastly, we can add in rasters.
 
 ```{r, eval=FALSE}
-map <- leaflet()
-map <- addTiles(map)
-map <- addPolylines(map,data=dc_metro)
-#Note: Takes a while.  Does projection behind the scenes.
-map <- addRasterImage(map, dc_elev)
-map
+map + dc_metro_sttn + dc_elev
 ```
 
 ## Exercise 4.2
 For this exercise, we will create a `mapview` map
 
-1. Create a leaflet map and add in the DC boundary.  Look at the `addPolygons` help to get you started.
+1. Create a `mapview` map and add in the DC boundary.
 2. Add in the NLCD you clipped out as part of lesson 3.
 
-## Static maps with `ggplot2`
+## Ask me anything
 
-- [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html): THE data viz package for R.  Also can be used to make maps (it is what I use for my static maps). Requires additional processing of the spatial data to create plots, but has almost unlimited possibilities for creating maps.
+We probably won't have additional time, but if for some reason we do, we can use the leftover time to do an Ask Me Anything.  Any questions are free game, but would assume they will focus on R, R for spatial analysis, R Package Development, etc.  Let the questions fly!
+

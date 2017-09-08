@@ -1,13 +1,11 @@
 base
-methods
-datasets
-utils
-grDevices
-graphics
-stats
 sp
 rgdal
 rgeos
 raster
 knitr
 sf
+leaflet
+mapview
+here
+dplyr
