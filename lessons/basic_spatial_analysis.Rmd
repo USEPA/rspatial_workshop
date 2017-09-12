@@ -130,7 +130,7 @@ st_crs(dc_metro)$proj4string
 So, let's reproject our data using the Albers projection stored in the `dc_nlcd` raster.  It is a `raster` object and not `sf` so it needs to be accessed with `proj4string()`
 
 ```{r}
-esri_alb_p4 <- projectio(dc_nlcd)
+esri_alb_p4 <- projection(dc_nlcd)
 dc_metro_alb <- st_transform(dc_metro,esri_alb_p4)
 plot(st_geometry(dc_metro_alb))
 ```

@@ -1,4 +1,8 @@
 
+```
+## Error: package or namespace load failed for 'tidyverse' in loadNamespace(j <- i[[1L]], c(lib.loc, .libPaths()), versionCheck = vI[[j]]):
+##  there is no package called 'ggplot2'
+```
 
 # Basic GIS Analysis with R
 We now have the required packages installed and know how to read data into R. Our next step is to start doing some GIS analysis with R. Throughout the course of this lesson will show how to do some basic manipulation of the `raster` and `sf` objects and then show a few examples of relatively straightforward analyses.  We will only be scratching the surface here, but hopefully this will provide a starting point for more work doing spatial analysis in R.  ***Note:*** *Much of this lesson assumes familiarity with R and working with data frames.*
@@ -25,23 +29,15 @@ Let's start working through some examples using the two Metro datasets.
 
 
 ```
-## Reading layer `Metro_Lines' from data source `C:\data\rspatial_workshop\data\Metro_Lines.shp' using driver `ESRI Shapefile'
-## Simple feature collection with 8 features and 4 fields
-## geometry type:  MULTILINESTRING
-## dimension:      XY
-## bbox:           xmin: -77.08576 ymin: 38.83827 xmax: -76.91327 ymax: 38.97984
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+## Error in here("data/Metro_Lines.shp"): could not find function "here"
 ```
 
 ```
-## Reading layer `Metro_Stations_District' from data source `C:\data\rspatial_workshop\data\metrostations.geojson' using driver `GeoJSON'
-## Simple feature collection with 40 features and 6 fields
-## geometry type:  POINT
-## dimension:      XY
-## bbox:           xmin: -77.085 ymin: 38.84567 xmax: -76.93526 ymax: 38.97609
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+## Error in here("data/metrostations.geojson"): could not find function "here"
+```
+
+```
+## Error in here("data/dc_ned.tif"): could not find function "here"
 ```
 
 We've already seen how to use the default print statements to look at the basics
@@ -60,40 +56,7 @@ head(dc_metro_sttn)
 ```
 
 ```
-## Simple feature collection with 6 features and 6 fields
-## geometry type:  POINT
-## dimension:      XY
-## bbox:           xmin: -77.03255 ymin: 38.89098 xmax: -76.93837 ymax: 38.97609
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-##   OBJECTID   GIS_ID                 NAME
-## 1        1 mstn_007     Columbia Heights
-## 2        2 mstn_020 Georgia Ave Petworth
-## 3        3 mstn_034               Takoma
-## 4        4 mstn_004        Brookland-CUA
-## 5        5 mstn_017          Fort Totten
-## 6        6 mstn_003         Benning Road
-##                                                  WEB_URL
-## 1 http://wmata.com/rail/station_detail.cfm?station_id=75
-## 2 http://wmata.com/rail/station_detail.cfm?station_id=76
-## 3 http://wmata.com/rail/station_detail.cfm?station_id=29
-## 4 http://wmata.com/rail/station_detail.cfm?station_id=27
-## 5 http://wmata.com/rail/station_detail.cfm?station_id=28
-## 6 http://wmata.com/rail/station_detail.cfm?station_id=90
-##                   LINE                ADDRESS
-## 1        green, yellow    3030 14TH STREET NW
-## 2        green, yellow 3700 GEORGIA AVENUE NW
-## 3                  red    327 CEDAR STREET NW
-## 4                  red 801 MICHIGAN AVENUE NE
-## 5   red, green, yellow 550 GALLOWAY STREET NE
-## 6 blue, orange, silver   4500 BENNING ROAD NE
-##                         geometry
-## 1 POINT (-77.0325544130882 38...
-## 2 POINT (-77.0234631972137 38...
-## 3 POINT (-77.0181789925646 38...
-## 4 POINT (-76.9945365689642 38...
-## 5 POINT (-77.002205364201 38....
-## 6 POINT (-76.9383671319143 38...
+## Error in head(dc_metro_sttn): object 'dc_metro_sttn' not found
 ```
 
 ```r
@@ -101,20 +64,7 @@ summary(dc_metro_sttn)
 ```
 
 ```
-##     OBJECTID        GIS_ID              NAME             WEB_URL         
-##  Min.   : 1.00   Length:40          Length:40          Length:40         
-##  1st Qu.:10.75   Class :character   Class :character   Class :character  
-##  Median :20.50   Mode  :character   Mode  :character   Mode  :character  
-##  Mean   :20.50                                                           
-##  3rd Qu.:30.25                                                           
-##  Max.   :40.00                                                           
-##      LINE             ADDRESS                   geometry 
-##  Length:40          Length:40          POINT        :40  
-##  Class :character   Class :character   epsg:4326    : 0  
-##  Mode  :character   Mode  :character   +proj=long...: 0  
-##                                                          
-##                                                          
-## 
+## Error in summary(dc_metro_sttn): object 'dc_metro_sttn' not found
 ```
 
 ```r
@@ -122,8 +72,7 @@ names(dc_metro_sttn)
 ```
 
 ```
-## [1] "OBJECTID" "GIS_ID"   "NAME"     "WEB_URL"  "LINE"     "ADDRESS" 
-## [7] "geometry"
+## Error in eval(expr, envir, enclos): object 'dc_metro_sttn' not found
 ```
 
 ```r
@@ -132,46 +81,7 @@ dc_metro_sttn$NAME
 ```
 
 ```
-##  [1] "Columbia Heights"                            
-##  [2] "Georgia Ave Petworth"                        
-##  [3] "Takoma"                                      
-##  [4] "Brookland-CUA"                               
-##  [5] "Fort Totten"                                 
-##  [6] "Benning Road"                                
-##  [7] "Deanwood"                                    
-##  [8] "NoMa - Gallaudet U"                          
-##  [9] "Tenleytown-AU"                               
-## [10] "Friendship Heights"                          
-## [11] "Foggy Bottom-GWU"                            
-## [12] "Farragut West"                               
-## [13] "Farragut North"                              
-## [14] "Dupont Circle"                               
-## [15] "Woodley Park-Zoo Adams Morgan"               
-## [16] "LEnfant Plaza"                               
-## [17] "Smithsonian"                                 
-## [18] "Federal Triangle"                            
-## [19] "Archives-Navy Meml"                          
-## [20] "Waterfront"                                  
-## [21] "Navy Yard - Ballpark"                        
-## [22] "Federal Center SW"                           
-## [23] "Judiciary Sq"                                
-## [24] "Capitol South"                               
-## [25] "McPherson Sq"                                
-## [26] "Metro Center"                                
-## [27] "Gallery Pl-Chinatown"                        
-## [28] "Mt Vernon Sq - 7th St Convention Center"     
-## [29] "U St/African-Amer Civil War Memorial/Cardozo"
-## [30] "Shaw-Howard Univ"                            
-## [31] "Union Station"                               
-## [32] "Congress Heights"                            
-## [33] "Anacostia"                                   
-## [34] "Eastern Market"                              
-## [35] "Potomac Ave"                                 
-## [36] "Stadium Armory"                              
-## [37] "Rhode Island Ave"                            
-## [38] "Minnesota Ave"                               
-## [39] "Van Ness-UDC"                                
-## [40] "Cleveland Park"
+## Error in eval(expr, envir, enclos): object 'dc_metro_sttn' not found
 ```
 
 Now for the fun part.  If you use base R mostly, then you can use indexing/subsetting tools you already know to pull out individual features based on the data stored in the `sf` objects.  For instance:
@@ -180,45 +90,35 @@ Now for the fun part.  If you use base R mostly, then you can use indexing/subse
 ```r
 #select with base indexing
 est_mrkt <- dc_metro_sttn[dc_metro_sttn$NAME == "Eastern Market",]
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'dc_metro_sttn' not found
+```
+
+```r
 est_mrkt
 ```
 
 ```
-## Simple feature collection with 1 feature and 6 fields
-## geometry type:  POINT
-## dimension:      XY
-## bbox:           xmin: -76.996 ymin: 38.88463 xmax: -76.996 ymax: 38.88463
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-##    OBJECTID   GIS_ID           NAME
-## 34       34 mstn_011 Eastern Market
-##                                                   WEB_URL
-## 34 http://wmata.com/rail/station_detail.cfm?station_id=60
-##                    LINE                    ADDRESS
-## 34 blue, orange, silver 701 PENNSYLVANIA AVENUE SE
-##                          geometry
-## 34 POINT (-76.996003408071 38....
+## Error in eval(expr, envir, enclos): object 'est_mrkt' not found
 ```
 
 ```r
 #select with subset (plus a Lil Rhody Shout Out!)
 ri <- subset(dc_metro_sttn,NAME == "Rhode Island Ave")
+```
+
+```
+## Error in subset(dc_metro_sttn, NAME == "Rhode Island Ave"): object 'dc_metro_sttn' not found
+```
+
+```r
 ri
 ```
 
 ```
-## Simple feature collection with 1 feature and 6 fields
-## geometry type:  POINT
-## dimension:      XY
-## bbox:           xmin: -76.99594 ymin: 38.92107 xmax: -76.99594 ymax: 38.92107
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-##    OBJECTID   GIS_ID             NAME
-## 37       37 mstn_030 Rhode Island Ave
-##                                                   WEB_URL LINE
-## 37 http://wmata.com/rail/station_detail.cfm?station_id=26  red
-##                       ADDRESS                       geometry
-## 37 919 RHODE ISLAND AVENUE NE POINT (-76.9959392002222 38...
+## Error in eval(expr, envir, enclos): object 'ri' not found
 ```
 
 This is cool, but even better is our ability to use `dplyr` for this type of work.
@@ -232,84 +132,18 @@ library(dplyr)
 # Let's get just the Red Line Stations
 red_line_sttn <- dc_metro_sttn %>%
   filter(grepl("red",LINE))
+```
+
+```
+## Error in eval(lhs, parent, parent): object 'dc_metro_sttn' not found
+```
+
+```r
 red_line_sttn
 ```
 
 ```
-## Simple feature collection with 16 features and 6 fields
-## geometry type:  POINT
-## dimension:      XY
-## bbox:           xmin: -77.085 ymin: 38.8961 xmax: -76.99454 ymax: 38.97609
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-##    OBJECTID   GIS_ID                          NAME
-## 1         3 mstn_034                        Takoma
-## 2         4 mstn_004                 Brookland-CUA
-## 3         5 mstn_017                   Fort Totten
-## 4         8 mstn_028            NoMa - Gallaudet U
-## 5         9 mstn_035                 Tenleytown-AU
-## 6        10 mstn_018            Friendship Heights
-## 7        13 mstn_012                Farragut North
-## 8        14 mstn_010                 Dupont Circle
-## 9        15 mstn_040 Woodley Park-Zoo Adams Morgan
-## 10       23 mstn_021                  Judiciary Sq
-## 11       26 mstn_024                  Metro Center
-## 12       27 mstn_019          Gallery Pl-Chinatown
-## 13       31 mstn_037                 Union Station
-## 14       37 mstn_030              Rhode Island Ave
-## 15       39 mstn_038                  Van Ness-UDC
-## 16       40 mstn_006                Cleveland Park
-##                                                    WEB_URL
-## 1   http://wmata.com/rail/station_detail.cfm?station_id=29
-## 2   http://wmata.com/rail/station_detail.cfm?station_id=27
-## 3   http://wmata.com/rail/station_detail.cfm?station_id=28
-## 4  http://wmata.com/rail/station_detail.cfm?station_id=108
-## 5   http://wmata.com/rail/station_detail.cfm?station_id=10
-## 6   http://wmata.com/rail/station_detail.cfm?station_id=11
-## 7    http://wmata.com/rail/station_detail.cfm?station_id=4
-## 8    http://wmata.com/rail/station_detail.cfm?station_id=6
-## 9    http://wmata.com/rail/station_detail.cfm?station_id=7
-## 10  http://wmata.com/rail/station_detail.cfm?station_id=23
-## 11   http://wmata.com/rail/station_detail.cfm?station_id=1
-## 12  http://wmata.com/rail/station_detail.cfm?station_id=21
-## 13  http://wmata.com/rail/station_detail.cfm?station_id=25
-## 14  http://wmata.com/rail/station_detail.cfm?station_id=26
-## 15   http://wmata.com/rail/station_detail.cfm?station_id=9
-## 16   http://wmata.com/rail/station_detail.cfm?station_id=8
-##                         LINE                    ADDRESS
-## 1                        red        327 CEDAR STREET NW
-## 2                        red     801 MICHIGAN AVENUE NE
-## 3         red, green, yellow     550 GALLOWAY STREET NE
-## 4                        red      200 FLORIDA AVENUE NE
-## 5                        red   4501 WISCONSIN AVENUE NW
-## 6                        red   5337 WISCONSIN AVENUE NW
-## 7                        red 1001 CONNECTICUT AVENUE NW
-## 8                        red        1525 20TH STREET NW
-## 9                        red        2700 24TH STREET NW
-## 10                       red            450 F STREET NW
-## 11 red, blue, orange, silver         607 13TH STREET NW
-## 12        red, green, yellow            630 H STREET NW
-## 13                       red          701 1ST STREET NE
-## 14                       red 919 RHODE ISLAND AVENUE NE
-## 15                       red 4200 CONNECTICUT AVENUE NW
-## 16                       red 3599 CONNECTICUT AVENUE NW
-##                          geometry
-## 1  POINT (-77.0181789925646 38...
-## 2  POINT (-76.9945365689642 38...
-## 3  POINT (-77.002205364201 38....
-## 4  POINT (-77.0030227321829 38...
-## 5  POINT (-77.0795896368441 38...
-## 6  POINT (-77.084998118688 38....
-## 7  POINT (-77.0397031233431 38...
-## 8  POINT (-77.0434166573705 38...
-## 9  POINT (-77.0524203221932 38...
-## 10 POINT (-77.0166412451066 38...
-## 11 POINT (-77.0280802893592 38...
-## 12 POINT (-77.0219176806835 38...
-## 13 POINT (-77.0074165779102 38...
-## 14 POINT (-76.9959392002222 38...
-## 15 POINT (-77.0629884863183 38...
-## 16 POINT (-77.0580448228721 38...
+## Error in eval(expr, envir, enclos): object 'red_line_sttn' not found
 ```
 
 Let's add some data. I found some ridership data for the different stations and summarized that, by station, into "station_rides.csv".  Let's pull that in, and add it to `dc_metro_sttn`. 
@@ -318,10 +152,20 @@ Let's add some data. I found some ridership data for the different stations and 
 ```r
 # Read in ridership data
 station_rides <- read.csv(here("data/station_rides.csv"), stringsAsFactors = FALSE)
+```
 
+```
+## Error in here("data/station_rides.csv"): could not find function "here"
+```
+
+```r
 # Now a typical dplyr workflow
 dc_metro_sttn <- dc_metro_sttn %>%
   left_join(station_rides,by = c("NAME" = "Ent.Station"))
+```
+
+```
+## Error in eval(lhs, parent, parent): object 'dc_metro_sttn' not found
 ```
 
 So, now we can use these values to filter our dataset, perhaps to just the stations with average ridership greater than 10000.
@@ -331,32 +175,18 @@ So, now we can use these values to filter our dataset, perhaps to just the stati
 busy_sttn <- dc_metro_sttn %>%
   filter(avg_wkday > 10000) %>%
   select(name = NAME, line = LINE, ridership = avg_wkday)
+```
+
+```
+## Error in eval(lhs, parent, parent): object 'dc_metro_sttn' not found
+```
+
+```r
 busy_sttn
 ```
 
 ```
-## Simple feature collection with 7 features and 3 fields
-## geometry type:  POINT
-## dimension:      XY
-## bbox:           xmin: -77.04342 ymin: 38.88803 xmax: -77.00742 ymax: 38.92785
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-##               name                      line ridership
-## 1 Columbia Heights             green, yellow   12608.3
-## 2    Farragut West      blue, orange, silver   22365.4
-## 3   Farragut North                       red   26012.4
-## 4    Dupont Circle                       red   18291.8
-## 5      Smithsonian      blue, orange, silver   11671.6
-## 6     Metro Center red, blue, orange, silver   28199.5
-## 7    Union Station                       red   32611.1
-##                         geometry
-## 1 POINT (-77.0325544130882 38...
-## 2 POINT (-77.0406977114452 38...
-## 3 POINT (-77.0397031233431 38...
-## 4 POINT (-77.0434166573705 38...
-## 5 POINT (-77.0280685258322 38...
-## 6 POINT (-77.0280802893592 38...
-## 7 POINT (-77.0074165779102 38...
+## Error in eval(expr, envir, enclos): object 'busy_sttn' not found
 ```
 
 Lastly, we can do some aggregation with `dplyr`.  Say we wanted to estimate total average weekly riders on the different line/line combinations.
@@ -367,28 +197,18 @@ dc_metro_stn_summ <- dc_metro_sttn %>%
   group_by(LINE) %>%
   summarize(total_week_avg_ridership = sum(avg_wkday, na.rm = TRUE)) %>%
   arrange(desc(total_week_avg_ridership))
+```
+
+```
+## Error in eval(lhs, parent, parent): object 'dc_metro_sttn' not found
+```
+
+```r
 dc_metro_stn_summ
 ```
 
 ```
-## Simple feature collection with 9 features and 2 fields
-## geometry type:  GEOMETRY
-## dimension:      XY
-## bbox:           xmin: -77.085 ymin: 38.84567 xmax: -76.93526 ymax: 38.97609
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-## # A tibble: 9 x 3
-##                            LINE total_week_avg_ridership          geometry
-##                           <chr>                    <dbl>  <simple_feature>
-## 1                           red                 110820.9 <MULTIPOINT (...>
-## 2          blue, orange, silver                  61476.3 <MULTIPOINT (...>
-## 3     red, blue, orange, silver                  28199.5 <POINT (-77.0...>
-## 4                         green                  14708.6 <MULTIPOINT (...>
-## 5                 green, yellow                  12608.3 <MULTIPOINT (...>
-## 6            red, green, yellow                   7442.0 <MULTIPOINT (...>
-## 7          orange, blue, silver                   6352.1 <POINT (-77.0...>
-## 8                        orange                   1761.2 <MULTIPOINT (...>
-## 9 grn, yllw, orange, blue, slvr                      0.0 <POINT (-77.0...>
+## Error in eval(expr, envir, enclos): object 'dc_metro_stn_summ' not found
 ```
 
 Key thing to point out here is that not only have we aggregated and summarized the numeric values, but the spatial data has been aggregated into a MULTIPOINT object as well.  This works equally as well for lines and polygons (whoa!)
@@ -415,18 +235,18 @@ st_crs(dc_metro)$proj4string
 ```
 
 ```
-## [1] "+proj=longlat +datum=WGS84 +no_defs"
+## Error in st_crs(dc_metro): object 'dc_metro' not found
 ```
 
 So, let's reproject our data using the Albers projection stored in the `dc_nlcd` raster.  It is a `raster` object and not `sf` so it needs to be accessed with `proj4string()`
 
 
 ```r
-esri_alb_p4 <- projectio(dc_nlcd)
+esri_alb_p4 <- projection(dc_nlcd)
 ```
 
 ```
-## Error in projectio(dc_nlcd): could not find function "projectio"
+## Error in methods::extends(class(x), "BasicRaster"): object 'dc_nlcd' not found
 ```
 
 ```r
@@ -434,7 +254,7 @@ dc_metro_alb <- st_transform(dc_metro,esri_alb_p4)
 ```
 
 ```
-## Error in make_crs(crs): object 'esri_alb_p4' not found
+## Error in st_transform(dc_metro, esri_alb_p4): object 'dc_metro' not found
 ```
 
 ```r
@@ -454,7 +274,7 @@ dc_metro_sttn_alb <- st_transform(dc_metro_sttn,
 ```
 
 ```
-## Error in st_crs(dc_metro_alb): object 'dc_metro_alb' not found
+## Error in st_transform(dc_metro_sttn, st_crs(dc_metro_alb)$proj4string): object 'dc_metro_sttn' not found
 ```
 
 Projecting rasters is a bit different.  We will use `raster::projectRaster` to accomplish this.   
@@ -465,7 +285,7 @@ dc_elev_alb <- projectRaster(dc_elev,crs=st_crs(dc_metro_alb)$proj4string)
 ```
 
 ```
-## Error in st_crs(dc_metro_alb): object 'dc_metro_alb' not found
+## Error in methods::extends(class(x), "BasicRaster"): object 'dc_elev' not found
 ```
 
 ## Exercise 3.1
@@ -577,14 +397,7 @@ dc_elev
 ```
 
 ```
-## class       : RasterLayer 
-## dimensions  : 798, 921, 734958  (nrow, ncol, ncell)
-## resolution  : 0.0002777778, 0.0002777778  (x, y)
-## extent      : -77.15306, -76.89722, 38.77639, 38.99806  (xmin, xmax, ymin, ymax)
-## coord. ref. : +proj=longlat +datum=NAD83 +no_defs +ellps=GRS80 +towgs84=0,0,0 
-## data source : C:\data\rspatial_workshop\data\dc_ned.tif 
-## names       : dc_ned 
-## values      : -5.316066, 131.4813  (min, max)
+## Error in eval(expr, envir, enclos): object 'dc_elev' not found
 ```
 
 This gives us the basics.  There are many options for looking at the values stored in the raster.  I usually default to `values` which returns the values as a vector which we can then use in R functions.
@@ -597,7 +410,7 @@ mean(values(dc_elev),na.omit=TRUE)
 ```
 
 ```
-## [1] 48.76833
+## Error in values(dc_elev): object 'dc_elev' not found
 ```
 
 If our raster contains categorical data (e.g. LULC), we can work with that too.  We don't have a ready example so lets use another `raster` function to reclassify our elevation data and then look at some summary stats of that.
@@ -606,24 +419,38 @@ If our raster contains categorical data (e.g. LULC), we can work with that too. 
 ```r
 #reclass elevation into H, M, L
 elev_summ <- summary(values(dc_elev))
+```
+
+```
+## Error in values(dc_elev): object 'dc_elev' not found
+```
+
+```r
 #this is the format for the look up table expected by reclassify
 rcl <- matrix(c(-Inf,elev_summ[2],1,
                 elev_summ[2],elev_summ[5],2,
                 elev_summ[5],Inf,3),
               nrow=3,byrow=T)
+```
+
+```
+## Error in matrix(c(-Inf, elev_summ[2], 1, elev_summ[2], elev_summ[5], 2, : object 'elev_summ' not found
+```
+
+```r
 dc_elev_class <- reclassify(dc_elev,rcl)
+```
+
+```
+## Error in reclassify(dc_elev, rcl): object 'dc_elev' not found
+```
+
+```r
 dc_elev_class
 ```
 
 ```
-## class       : RasterLayer 
-## dimensions  : 798, 921, 734958  (nrow, ncol, ncell)
-## resolution  : 0.0002777778, 0.0002777778  (x, y)
-## extent      : -77.15306, -76.89722, 38.77639, 38.99806  (xmin, xmax, ymin, ymax)
-## coord. ref. : +proj=longlat +datum=NAD83 +no_defs +ellps=GRS80 +towgs84=0,0,0 
-## data source : in memory
-## names       : layer 
-## values      : 1, 3  (min, max)
+## Error in eval(expr, envir, enclos): object 'dc_elev_class' not found
 ```
 
 So now we have categorical data, we can do cross-tabs on the values and calculate percent in each category.
@@ -632,13 +459,18 @@ So now we have categorical data, we can do cross-tabs on the values and calculat
 ```r
 elev_class_perc <- table(values(dc_elev_class))/
   length(values(dc_elev_class))
+```
+
+```
+## Error in values(dc_elev_class): object 'dc_elev_class' not found
+```
+
+```r
 elev_class_perc
 ```
 
 ```
-## 
-##         1         2         3 
-## 0.2500007 0.4999986 0.2500007
+## Error in eval(expr, envir, enclos): object 'elev_class_perc' not found
 ```
 
 The last task we will show is using vector to data to clip out our raster data.  We can do this with crop and mask.  We do the crop first as it will subset our raster based on the extent.  In most cases this is a significantly smaller area than the full raster dataset and speeds up the subsequent mask. We will do this with the projected versions.
