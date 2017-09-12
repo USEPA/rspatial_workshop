@@ -25,7 +25,7 @@ Let's start working through some examples using the two Metro datasets.
 
 
 ```
-## Reading layer `Metro_Lines' from data source `/var/host/media/removable/SD Card/rspatial_workshop/data/Metro_Lines.shp' using driver `ESRI Shapefile'
+## Reading layer `Metro_Lines' from data source `C:\data\rspatial_workshop\data\Metro_Lines.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 8 features and 4 fields
 ## geometry type:  MULTILINESTRING
 ## dimension:      XY
@@ -35,7 +35,7 @@ Let's start working through some examples using the two Metro datasets.
 ```
 
 ```
-## Reading layer `OGRGeoJSON' from data source `/var/host/media/removable/SD Card/rspatial_workshop/data/metrostations.geojson' using driver `GeoJSON'
+## Reading layer `Metro_Stations_District' from data source `C:\data\rspatial_workshop\data\metrostations.geojson' using driver `GeoJSON'
 ## Simple feature collection with 40 features and 6 fields
 ## geometry type:  POINT
 ## dimension:      XY
@@ -422,11 +422,11 @@ So, let's reproject our data using the Albers projection stored in the `dc_nlcd`
 
 
 ```r
-esri_alb_p4 <- proj4string(dc_nlcd)
+esri_alb_p4 <- projectio(dc_nlcd)
 ```
 
 ```
-## Error in proj4string(dc_nlcd): object 'dc_nlcd' not found
+## Error in projectio(dc_nlcd): could not find function "projectio"
 ```
 
 ```r
@@ -582,7 +582,7 @@ dc_elev
 ## resolution  : 0.0002777778, 0.0002777778  (x, y)
 ## extent      : -77.15306, -76.89722, 38.77639, 38.99806  (xmin, xmax, ymin, ymax)
 ## coord. ref. : +proj=longlat +datum=NAD83 +no_defs +ellps=GRS80 +towgs84=0,0,0 
-## data source : /var/host/media/removable/SD Card/rspatial_workshop/data/dc_ned.tif 
+## data source : C:\data\rspatial_workshop\data\dc_ned.tif 
 ## names       : dc_ned 
 ## values      : -5.316066, 131.4813  (min, max)
 ```
