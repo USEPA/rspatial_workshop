@@ -154,7 +154,7 @@ dc_elev
 plot(dc_elev)
 ```
 
-One thing to note is that, by default, `raster` actually leaves the data on disk as opposed to pulling it all into memory (like most things do in R). This allows us to work with rasters that are significantly larger than are available memory.  Only downside is that if we want to use other R functions on really big rasters we might have some issues.  Anyway, `raster` is best available (and is pretty good) method for working with rasters in R.  That is changing as other options are in development, most notably [the `stars` package](https://github.com/r-spatial/stars).
+One thing to note is that, by default, `raster` actually leaves the data on disk as opposed to pulling it all into memory (like most things do in R). This allows us to work with rasters that are significantly larger than are available memory.  Only downside is that if we want to use other R functions on really big rasters we might have some issues.  Anyway, `raster` is best available (and is very good) method for working with rasters in R.  That is changing as other options are in development, most notably [the `stars` package](https://github.com/r-spatial/stars) for spatio-temporal data and `raster` I believe should be seeing some updates.
 
 ## Writing rasters:
 Writing out to a raster file is done with `writeRaster`.  It has three arguments, "x" which is the `raster` object, "filename" which is the output file, and "format" which is the output raster format.  In practice, you can usually get away with not specifying the format as `raster` will try to infer the file format from the file name.  If you want to see the possible formats you can use `writeFormats()`.

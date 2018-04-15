@@ -15,7 +15,7 @@ We now have the required packages installed and know how to read data into R. Ou
 - [Exercise 3.3](#exercise-33)
 
 ## Explore and manipulate
-The greatest thing about the `sf` objects is that the tricks you know for working with data frames will also work. This is becuase `sf` objects are data frames that hold the geographic information in a special list-column.  In addition to being data frames, `sf` was designed to work with the [`tidyverse`](https://tidyverse.org) and are organized as [tidy data.](http://vita.had.co.nz/papers/tidy-data.html)  This allows us to subset our spatial data, summarize data, etc. using the tools in the `tidyverse`, most notabley `dplyr`.  If you haven't worked with spatial data in R the "old way", then you can't fully appreciate how much this should:
+The greatest thing about the `sf` objects is that the tricks you know for working with data frames will also work. This is becuase `sf` objects are data frames that hold the geographic information in a special list-column.  In addition to being data frames, `sf` was designed to work with the [`tidyverse`](https://tidyverse.org) and are organized as [tidy data.](http://vita.had.co.nz/papers/tidy-data.html)  This allows us to subset our spatial data, summarize data, etc. using the tools in the `tidyverse`, most notabley `dplyr`.  If you haven't worked with spatial data in R the "old way", then you can't fully appreciate how much this should completely:
 
 ![](https://media.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif)
 
@@ -35,7 +35,7 @@ Let's start working through some examples using the two Metro datasets.
 ```
 
 ```
-## Reading layer `OGRGeoJSON' from data source `/var/host/media/removable/SD Card/rspatial_workshop/data/metrostations.geojson' using driver `GeoJSON'
+## Reading layer `Metro_Stations_District' from data source `/var/host/media/removable/SD Card/rspatial_workshop/data/metrostations.geojson' using driver `GeoJSON'
 ## Simple feature collection with 40 features and 6 fields
 ## geometry type:  POINT
 ## dimension:      XY
@@ -80,20 +80,13 @@ head(dc_metro_sttn)
 ## 4 http://wmata.com/rail/station_detail.cfm?station_id=27
 ## 5 http://wmata.com/rail/station_detail.cfm?station_id=28
 ## 6 http://wmata.com/rail/station_detail.cfm?station_id=90
-##                   LINE                ADDRESS
-## 1        green, yellow    3030 14TH STREET NW
-## 2        green, yellow 3700 GEORGIA AVENUE NW
-## 3                  red    327 CEDAR STREET NW
-## 4                  red 801 MICHIGAN AVENUE NE
-## 5   red, green, yellow 550 GALLOWAY STREET NE
-## 6 blue, orange, silver   4500 BENNING ROAD NE
-##                         geometry
-## 1 POINT (-77.0325544130882 38...
-## 2 POINT (-77.0234631972137 38...
-## 3 POINT (-77.0181789925646 38...
-## 4 POINT (-76.9945365689642 38...
-## 5 POINT (-77.002205364201 38....
-## 6 POINT (-76.9383671319143 38...
+##                   LINE                ADDRESS                   geometry
+## 1        green, yellow    3030 14TH STREET NW POINT (-77.03255 38.92785)
+## 2        green, yellow 3700 GEORGIA AVENUE NW POINT (-77.02346 38.93744)
+## 3                  red    327 CEDAR STREET NW POINT (-77.01818 38.97609)
+## 4                  red 801 MICHIGAN AVENUE NE POINT (-76.99454 38.93322)
+## 5   red, green, yellow 550 GALLOWAY STREET NE POINT (-77.00221 38.95185)
+## 6 blue, orange, silver   4500 BENNING ROAD NE POINT (-76.93837 38.89098)
 ```
 
 ```r
@@ -196,8 +189,8 @@ est_mrkt
 ## 34 http://wmata.com/rail/station_detail.cfm?station_id=60
 ##                    LINE                    ADDRESS
 ## 34 blue, orange, silver 701 PENNSYLVANIA AVENUE SE
-##                          geometry
-## 34 POINT (-76.996003408071 38....
+##                    geometry
+## 34 POINT (-76.996 38.88463)
 ```
 
 ```r
@@ -217,8 +210,8 @@ ri
 ## 37       37 mstn_030 Rhode Island Ave
 ##                                                   WEB_URL LINE
 ## 37 http://wmata.com/rail/station_detail.cfm?station_id=26  red
-##                       ADDRESS                       geometry
-## 37 919 RHODE ISLAND AVENUE NE POINT (-76.9959392002222 38...
+##                       ADDRESS                   geometry
+## 37 919 RHODE ISLAND AVENUE NE POINT (-76.99594 38.92107)
 ```
 
 This is cool, but even better is our ability to use `dplyr` for this type of work.
@@ -242,6 +235,7 @@ red_line_sttn
 ## bbox:           xmin: -77.085 ymin: 38.8961 xmax: -76.99454 ymax: 38.97609
 ## epsg (SRID):    4326
 ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+## First 10 features:
 ##    OBJECTID   GIS_ID                          NAME
 ## 1         3 mstn_034                        Takoma
 ## 2         4 mstn_004                 Brookland-CUA
@@ -253,12 +247,6 @@ red_line_sttn
 ## 8        14 mstn_010                 Dupont Circle
 ## 9        15 mstn_040 Woodley Park-Zoo Adams Morgan
 ## 10       23 mstn_021                  Judiciary Sq
-## 11       26 mstn_024                  Metro Center
-## 12       27 mstn_019          Gallery Pl-Chinatown
-## 13       31 mstn_037                 Union Station
-## 14       37 mstn_030              Rhode Island Ave
-## 15       39 mstn_038                  Van Ness-UDC
-## 16       40 mstn_006                Cleveland Park
 ##                                                    WEB_URL
 ## 1   http://wmata.com/rail/station_detail.cfm?station_id=29
 ## 2   http://wmata.com/rail/station_detail.cfm?station_id=27
@@ -270,46 +258,28 @@ red_line_sttn
 ## 8    http://wmata.com/rail/station_detail.cfm?station_id=6
 ## 9    http://wmata.com/rail/station_detail.cfm?station_id=7
 ## 10  http://wmata.com/rail/station_detail.cfm?station_id=23
-## 11   http://wmata.com/rail/station_detail.cfm?station_id=1
-## 12  http://wmata.com/rail/station_detail.cfm?station_id=21
-## 13  http://wmata.com/rail/station_detail.cfm?station_id=25
-## 14  http://wmata.com/rail/station_detail.cfm?station_id=26
-## 15   http://wmata.com/rail/station_detail.cfm?station_id=9
-## 16   http://wmata.com/rail/station_detail.cfm?station_id=8
-##                         LINE                    ADDRESS
-## 1                        red        327 CEDAR STREET NW
-## 2                        red     801 MICHIGAN AVENUE NE
-## 3         red, green, yellow     550 GALLOWAY STREET NE
-## 4                        red      200 FLORIDA AVENUE NE
-## 5                        red   4501 WISCONSIN AVENUE NW
-## 6                        red   5337 WISCONSIN AVENUE NW
-## 7                        red 1001 CONNECTICUT AVENUE NW
-## 8                        red        1525 20TH STREET NW
-## 9                        red        2700 24TH STREET NW
-## 10                       red            450 F STREET NW
-## 11 red, blue, orange, silver         607 13TH STREET NW
-## 12        red, green, yellow            630 H STREET NW
-## 13                       red          701 1ST STREET NE
-## 14                       red 919 RHODE ISLAND AVENUE NE
-## 15                       red 4200 CONNECTICUT AVENUE NW
-## 16                       red 3599 CONNECTICUT AVENUE NW
-##                          geometry
-## 1  POINT (-77.0181789925646 38...
-## 2  POINT (-76.9945365689642 38...
-## 3  POINT (-77.002205364201 38....
-## 4  POINT (-77.0030227321829 38...
-## 5  POINT (-77.0795896368441 38...
-## 6  POINT (-77.084998118688 38....
-## 7  POINT (-77.0397031233431 38...
-## 8  POINT (-77.0434166573705 38...
-## 9  POINT (-77.0524203221932 38...
-## 10 POINT (-77.0166412451066 38...
-## 11 POINT (-77.0280802893592 38...
-## 12 POINT (-77.0219176806835 38...
-## 13 POINT (-77.0074165779102 38...
-## 14 POINT (-76.9959392002222 38...
-## 15 POINT (-77.0629884863183 38...
-## 16 POINT (-77.0580448228721 38...
+##                  LINE                    ADDRESS
+## 1                 red        327 CEDAR STREET NW
+## 2                 red     801 MICHIGAN AVENUE NE
+## 3  red, green, yellow     550 GALLOWAY STREET NE
+## 4                 red      200 FLORIDA AVENUE NE
+## 5                 red   4501 WISCONSIN AVENUE NW
+## 6                 red   5337 WISCONSIN AVENUE NW
+## 7                 red 1001 CONNECTICUT AVENUE NW
+## 8                 red        1525 20TH STREET NW
+## 9                 red        2700 24TH STREET NW
+## 10                red            450 F STREET NW
+##                      geometry
+## 1  POINT (-77.01818 38.97609)
+## 2  POINT (-76.99454 38.93322)
+## 3  POINT (-77.00221 38.95185)
+## 4  POINT (-77.00302 38.90702)
+## 5  POINT (-77.07959 38.94886)
+## 6    POINT (-77.085 38.95949)
+## 7   POINT (-77.0397 38.90321)
+## 8  POINT (-77.04342 38.90961)
+## 9  POINT (-77.05242 38.92509)
+## 10  POINT (-77.01664 38.8961)
 ```
 
 Let's add some data. I found some ridership data for the different stations and summarized that, by station, into "station_rides.csv".  Let's pull that in, and add it to `dc_metro_sttn`. 
@@ -349,14 +319,14 @@ busy_sttn
 ## 5      Smithsonian      blue, orange, silver   11671.6
 ## 6     Metro Center red, blue, orange, silver   28199.5
 ## 7    Union Station                       red   32611.1
-##                         geometry
-## 1 POINT (-77.0325544130882 38...
-## 2 POINT (-77.0406977114452 38...
-## 3 POINT (-77.0397031233431 38...
-## 4 POINT (-77.0434166573705 38...
-## 5 POINT (-77.0280685258322 38...
-## 6 POINT (-77.0280802893592 38...
-## 7 POINT (-77.0074165779102 38...
+##                     geometry
+## 1 POINT (-77.03255 38.92785)
+## 2  POINT (-77.0407 38.90132)
+## 3  POINT (-77.0397 38.90321)
+## 4 POINT (-77.04342 38.90961)
+## 5 POINT (-77.02807 38.88803)
+## 6 POINT (-77.02808 38.89832)
+## 7 POINT (-77.00742 38.89777)
 ```
 
 Lastly, we can do some aggregation with `dplyr`.  Say we wanted to estimate total average weekly riders on the different line/line combinations.
@@ -378,17 +348,17 @@ dc_metro_stn_summ
 ## epsg (SRID):    4326
 ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
 ## # A tibble: 9 x 3
-##                            LINE total_week_avg_ridership          geometry
-##                           <chr>                    <dbl>  <simple_feature>
-## 1                           red                 110820.9 <MULTIPOINT (...>
-## 2          blue, orange, silver                  61476.3 <MULTIPOINT (...>
-## 3     red, blue, orange, silver                  28199.5 <POINT (-77.0...>
-## 4                         green                  14708.6 <MULTIPOINT (...>
-## 5                 green, yellow                  12608.3 <MULTIPOINT (...>
-## 6            red, green, yellow                   7442.0 <MULTIPOINT (...>
-## 7          orange, blue, silver                   6352.1 <POINT (-77.0...>
-## 8                        orange                   1761.2 <MULTIPOINT (...>
-## 9 grn, yllw, orange, blue, slvr                      0.0 <POINT (-77.0...>
+##   LINE                          total_week_avg_…                  geometry
+##   <chr>                                    <dbl>            <GEOMETRY [°]>
+## 1 red                                     110821 MULTIPOINT (-77.085 38.9…
+## 2 blue, orange, silver                     61476 MULTIPOINT (-77.05028 38…
+## 3 red, blue, orange, silver                28200 POINT (-77.02808 38.8983…
+## 4 green                                    14709 MULTIPOINT (-77.01751 38…
+## 5 green, yellow                            12608 MULTIPOINT (-77.03255 38…
+## 6 red, green, yellow                        7442 MULTIPOINT (-77.02192 38…
+## 7 orange, blue, silver                      6352 POINT (-77.01587 38.8850…
+## 8 orange                                    1761 MULTIPOINT (-76.94675 38…
+## 9 grn, yllw, orange, blue, slvr                0 POINT (-77.02191 38.8848…
 ```
 
 Key thing to point out here is that not only have we aggregated and summarized the numeric values, but the spatial data has been aggregated into a MULTIPOINT object as well.  This works equally as well for lines and polygons (whoa!)
@@ -418,32 +388,17 @@ st_crs(dc_metro)$proj4string
 ## [1] "+proj=longlat +datum=WGS84 +no_defs"
 ```
 
-So, let's reproject our data using the Albers projection stored in the `dc_nlcd` raster.  It is a `raster` object and not `sf` so it needs to be accessed with `proj4string()`
+So, let's reproject our data using the Albers projection stored in the `dc_nlcd` raster.  It is a `raster` object and not `sf` so it needs to be accessed with `proj4string()` and we need to read it in.
 
 
 ```r
+dc_nlcd <- raster(here("data/dc_nlcd.tif"))
 esri_alb_p4 <- proj4string(dc_nlcd)
-```
-
-```
-## Error in proj4string(dc_nlcd): object 'dc_nlcd' not found
-```
-
-```r
 dc_metro_alb <- st_transform(dc_metro,esri_alb_p4)
-```
-
-```
-## Error in make_crs(crs): object 'esri_alb_p4' not found
-```
-
-```r
 plot(st_geometry(dc_metro_alb))
 ```
 
-```
-## Error in st_geometry(dc_metro_alb): object 'dc_metro_alb' not found
-```
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png)
 
 Luckily, it is pretty common to have several datasets with one of which in the projections you want to use.  We can then just pull the Proj4 string from that.
 
@@ -453,19 +408,11 @@ dc_metro_sttn_alb <- st_transform(dc_metro_sttn,
                                   st_crs(dc_metro_alb)$proj4string) 
 ```
 
-```
-## Error in st_crs(dc_metro_alb): object 'dc_metro_alb' not found
-```
-
 Projecting rasters is a bit different.  We will use `raster::projectRaster` to accomplish this.   
 
 
 ```r
 dc_elev_alb <- projectRaster(dc_elev,crs=st_crs(dc_metro_alb)$proj4string)
-```
-
-```
-## Error in st_crs(dc_metro_alb): object 'dc_metro_alb' not found
 ```
 
 ## Exercise 3.1
@@ -483,19 +430,10 @@ Let's start with a buffer. We will use the albers projected stations for these e
 
 ```r
 sttn_buff_500 <- st_buffer(dc_metro_sttn_alb,dist = 500)
-```
-
-```
-## Error in st_buffer(dc_metro_sttn_alb, dist = 500): object 'dc_metro_sttn_alb' not found
-```
-
-```r
 plot(st_geometry(sttn_buff_500))
 ```
 
-```
-## Error in st_geometry(sttn_buff_500): object 'sttn_buff_500' not found
-```
+![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png)
 
 We get a 500 meter circle around each of the stations.  
 
@@ -507,36 +445,13 @@ Let's say we wanted land area that was 100 to 500 meters away from a Metro Stati
 # st_union merges into one.
 sttn_buff_100 <- st_buffer(dc_metro_sttn_alb,dist = 100) %>%
   st_union() 
-```
-
-```
-## Error in st_buffer(dc_metro_sttn_alb, dist = 100): object 'dc_metro_sttn_alb' not found
-```
-
-```r
 sttn_buff_500 <- st_buffer(dc_metro_sttn_alb, dist = 500) %>%
   st_union()
-```
-
-```
-## Error in st_buffer(dc_metro_sttn_alb, dist = 500): object 'dc_metro_sttn_alb' not found
-```
-
-```r
 sttn_100_to_500 <- st_difference(sttn_buff_500, sttn_buff_100)
-```
-
-```
-## Error in st_difference(sttn_buff_500, sttn_buff_100): object 'sttn_buff_500' not found
-```
-
-```r
 plot(sttn_100_to_500)
 ```
 
-```
-## Error in plot(sttn_100_to_500): object 'sttn_100_to_500' not found
-```
+![plot of chunk diff](figure/diff-1.png)
 
 Lastly, let's pull out some of the basic geographic info on our datasets using `st_area` and `st_length`. Let's get the area and perimeter of the all the land 100 to 500 meters from a metro station
 
@@ -546,7 +461,7 @@ st_area(sttn_100_to_500)
 ```
 
 ```
-## Error in st_crs(x): object 'sttn_100_to_500' not found
+## 26187604 m^2
 ```
 
 ```r
@@ -554,7 +469,7 @@ st_length(sttn_100_to_500)
 ```
 
 ```
-## Error in st_geometry(x): object 'sttn_100_to_500' not found
+## 0 m
 ```
 
 Again, this is a very, very small portion of the GISy things you can do with `sf` but hopefully is enough to get you started.
@@ -648,54 +563,22 @@ As I mentioned above, to get this to work we will need to do some extra work bec
 
 ```r
 dc_elev_crop <- crop(dc_elev_alb,as(sttn_buff_500,"Spatial"))
-```
-
-```
-## Error in crop(dc_elev_alb, as(sttn_buff_500, "Spatial")): object 'dc_elev_alb' not found
-```
-
-```r
 plot(dc_elev_crop)
-```
-
-```
-## Error in plot(dc_elev_crop): object 'dc_elev_crop' not found
-```
-
-```r
 plot(sttn_buff_500,add=T)
 ```
 
-```
-## Error in plot(sttn_buff_500, add = T): object 'sttn_buff_500' not found
-```
+![plot of chunk unnamed-chunk-19](figure/unnamed-chunk-19-1.png)
 
 So, with this limited to just the extent of our dataset we can now clip out the values for each of the circles with.
 
 
 ```r
 dc_elev_sttns <- mask(dc_elev_crop,as(sttn_buff_500, "Spatial"))
-```
-
-```
-## Error in mask(dc_elev_crop, as(sttn_buff_500, "Spatial")): object 'dc_elev_crop' not found
-```
-
-```r
 plot(dc_elev_sttns)
-```
-
-```
-## Error in plot(dc_elev_sttns): object 'dc_elev_sttns' not found
-```
-
-```r
 plot(sttn_buff_500,add=T,border="red",lwd=2)
 ```
 
-```
-## Error in plot(sttn_buff_500, add = T, border = "red", lwd = 2): object 'sttn_buff_500' not found
-```
+![plot of chunk unnamed-chunk-20](figure/unnamed-chunk-20-1.png)
 
 That gives us just the elevation within 500 meters of the Metro stations.  Probably not really interesting information, but we have it!  It might be more interesting to get the average elevation of each metro station.  Our workflow would be different as we would need to look at this on a per-station basis.  Might require a loop or a different approach all together.  Certainly possible, but beyond what we have time for today.
 

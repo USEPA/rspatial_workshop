@@ -107,17 +107,23 @@ dc_metro
 ## 8 Metro_006          silver http://wmata.com/rail/maps/map.cfm        8
 ##                         geometry
 ## 1 MULTILINESTRING ((-77.02029...
-## 2 MULTILINESTRING ((-77.04157...
+## 2 MULTILINESTRING ((-77.04158...
 ## 3 MULTILINESTRING ((-77.06848...
 ## 4 MULTILINESTRING ((-76.98502...
 ## 5 MULTILINESTRING ((-76.98502...
-## 6 MULTILINESTRING ((-77.06842...
-## 7 MULTILINESTRING ((-76.95222...
+## 6 MULTILINESTRING ((-77.06843...
+## 7 MULTILINESTRING ((-76.95223...
 ## 8 MULTILINESTRING ((-77.04712...
 ```
 
 ```r
 plot(dc_metro)
+```
+
+```
+## Warning in classInt::classIntervals(na.omit(values), min(nbreaks, n.unq), :
+## n same as number of different finite values\neach different finite value is
+## a separate class
 ```
 
 ![plot of chunk metro_chk](figure/metro_chk-1.png)
@@ -177,7 +183,7 @@ dc_metro_sttn <- st_read(here("data/metrostations.geojson"))
 ```
 
 ```
-## Reading layer `OGRGeoJSON' from data source `/var/host/media/removable/SD Card/rspatial_workshop/data/metrostations.geojson' using driver `GeoJSON'
+## Reading layer `Metro_Stations_District' from data source `/var/host/media/removable/SD Card/rspatial_workshop/data/metrostations.geojson' using driver `GeoJSON'
 ## Simple feature collection with 40 features and 6 fields
 ## geometry type:  POINT
 ## dimension:      XY
@@ -215,20 +221,13 @@ head(dc_metro_sttn)
 ## 4 http://wmata.com/rail/station_detail.cfm?station_id=27
 ## 5 http://wmata.com/rail/station_detail.cfm?station_id=28
 ## 6 http://wmata.com/rail/station_detail.cfm?station_id=90
-##                   LINE                ADDRESS
-## 1        green, yellow    3030 14TH STREET NW
-## 2        green, yellow 3700 GEORGIA AVENUE NW
-## 3                  red    327 CEDAR STREET NW
-## 4                  red 801 MICHIGAN AVENUE NE
-## 5   red, green, yellow 550 GALLOWAY STREET NE
-## 6 blue, orange, silver   4500 BENNING ROAD NE
-##                         geometry
-## 1 POINT (-77.0325544130882 38...
-## 2 POINT (-77.0234631972137 38...
-## 3 POINT (-77.0181789925646 38...
-## 4 POINT (-76.9945365689642 38...
-## 5 POINT (-77.002205364201 38....
-## 6 POINT (-76.9383671319143 38...
+##                   LINE                ADDRESS                   geometry
+## 1        green, yellow    3030 14TH STREET NW POINT (-77.03255 38.92785)
+## 2        green, yellow 3700 GEORGIA AVENUE NW POINT (-77.02346 38.93744)
+## 3                  red    327 CEDAR STREET NW POINT (-77.01818 38.97609)
+## 4                  red 801 MICHIGAN AVENUE NE POINT (-76.99454 38.93322)
+## 5   red, green, yellow 550 GALLOWAY STREET NE POINT (-77.00221 38.95185)
+## 6 blue, orange, silver   4500 BENNING ROAD NE POINT (-76.93837 38.89098)
 ```
 
 ### Writing geojson
@@ -280,7 +279,7 @@ plot(dc_elev)
 
 ![plot of chunk raster](figure/raster-1.png)
 
-One thing to note is that, by default, `raster` actually leaves the data on disk as opposed to pulling it all into memory (like most things do in R). This allows us to work with rasters that are significantly larger than are available memory.  Only downside is that if we want to use other R functions on really big rasters we might have some issues.  Anyway, `raster` is best available (and is pretty good) method for working with rasters in R.  That is changing as other options are in development, most notably [the `stars` package](https://github.com/r-spatial/stars).
+One thing to note is that, by default, `raster` actually leaves the data on disk as opposed to pulling it all into memory (like most things do in R). This allows us to work with rasters that are significantly larger than are available memory.  Only downside is that if we want to use other R functions on really big rasters we might have some issues.  Anyway, `raster` is best available (and is very good) method for working with rasters in R.  That is changing as other options are in development, most notably [the `stars` package](https://github.com/r-spatial/stars) for spatio-temporal data and `raster` I believe should be seeing some updates.
 
 ## Writing rasters:
 Writing out to a raster file is done with `writeRaster`.  It has three arguments, "x" which is the `raster` object, "filename" which is the output file, and "format" which is the output raster format.  In practice, you can usually get away with not specifying the format as `raster` will try to infer the file format from the file name.  If you want to see the possible formats you can use `writeFormats()`.

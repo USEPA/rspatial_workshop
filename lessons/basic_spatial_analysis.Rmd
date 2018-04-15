@@ -20,7 +20,7 @@ We now have the required packages installed and know how to read data into R. Ou
 - [Exercise 3.3](#exercise-33)
 
 ## Explore and manipulate
-The greatest thing about the `sf` objects is that the tricks you know for working with data frames will also work. This is becuase `sf` objects are data frames that hold the geographic information in a special list-column.  In addition to being data frames, `sf` was designed to work with the [`tidyverse`](https://tidyverse.org) and are organized as [tidy data.](http://vita.had.co.nz/papers/tidy-data.html)  This allows us to subset our spatial data, summarize data, etc. using the tools in the `tidyverse`, most notabley `dplyr`.  If you haven't worked with spatial data in R the "old way", then you can't fully appreciate how much this should:
+The greatest thing about the `sf` objects is that the tricks you know for working with data frames will also work. This is becuase `sf` objects are data frames that hold the geographic information in a special list-column.  In addition to being data frames, `sf` was designed to work with the [`tidyverse`](https://tidyverse.org) and are organized as [tidy data.](http://vita.had.co.nz/papers/tidy-data.html)  This allows us to subset our spatial data, summarize data, etc. using the tools in the `tidyverse`, most notabley `dplyr`.  If you haven't worked with spatial data in R the "old way", then you can't fully appreciate how much this should completely:
 
 ![](https://media.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif)
 
@@ -127,9 +127,10 @@ We can pull them from existing `sf` objects like:
 st_crs(dc_metro)$proj4string
 ```
 
-So, let's reproject our data using the Albers projection stored in the `dc_nlcd` raster.  It is a `raster` object and not `sf` so it needs to be accessed with `proj4string()`
+So, let's reproject our data using the Albers projection stored in the `dc_nlcd` raster.  It is a `raster` object and not `sf` so it needs to be accessed with `proj4string()` and we need to read it in.
 
 ```{r}
+dc_nlcd <- raster(here("data/dc_nlcd.tif"))
 esri_alb_p4 <- proj4string(dc_nlcd)
 dc_metro_alb <- st_transform(dc_metro,esri_alb_p4)
 plot(st_geometry(dc_metro_alb))
